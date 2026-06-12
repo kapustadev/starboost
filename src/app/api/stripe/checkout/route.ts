@@ -23,7 +23,8 @@ export async function POST(req: Request) {
       email,
       createAccount,
       password,
-      name
+      name,
+      contactSocial
     } = body
 
     if (!platform || !country || !quantity || !targetUrl || !totalPrice || (!session && !email)) {
@@ -62,6 +63,8 @@ export async function POST(req: Request) {
         targetUrl,
         businessName,
         notes,
+        contactName: name || null,
+        contactSocial: contactSocial || null,
         pricePerReview,
         totalPrice,
         status: 'pending'

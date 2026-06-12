@@ -5,6 +5,8 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { PLATFORMS, COUNTRIES, calculatePrice, getPricePerReview, TextOption } from '@/lib/data'
 import { signIn, useSession } from 'next-auth/react'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 
 const URL_PLACEHOLDER: Record<string, string> = {
   google: 'https://maps.google.com/?cid=123456 or your Google Maps link',
@@ -35,6 +37,7 @@ function CheckoutContent() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+  const [contactSocial, setContactSocial] = useState('')
   const [createAccount, setCreateAccount] = useState(false)
   const [emailExists, setEmailExists] = useState(false)
   
@@ -87,6 +90,10 @@ function CheckoutContent() {
       alert('Please enter your email address to receive order updates')
       return
     }
+    if (!name) {
+      alert('Please enter your name')
+      return
+    }
 
     setLoading(true)
 
@@ -117,7 +124,8 @@ function CheckoutContent() {
           email,
           createAccount,
           password,
-          name
+          name,
+          contactSocial
         })
       })
 
@@ -131,18 +139,9 @@ function CheckoutContent() {
     } catch (err) {
       alert('An error occurred during checkout')
       setLoading(false)
-    }
-  }
-
   return (
     <>
-      <nav className="navbar scrolled">
-        <div className="container">
-          <div className="navbar-inner">
-            <Link href="/" className="navbar-logo">Stars<span>Boost</span></Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       <section className="section" style={{ paddingTop: '100px', minHeight: '100vh' }}>
         <div className="container">
@@ -156,6 +155,17 @@ function CheckoutContent() {
                 <h3 style={{ marginBottom: '20px' }}>Contact Details</h3>
                 
                 <div style={{ marginBottom: '16px' }}>
+                  <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Full Name *</label>
+                  <input 
+                    type="text" 
+                    className="form-input" 
+                    placeholder="John Doe" 
+                    value={name} 
+                    onChange={e => setName(e.target.value)} 
+                  />
+                </div>
+
+                <div style={{ marginBottom: '16px' }}>
                   <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Email Address *</label>
                   <input 
                     type="email" 
@@ -166,6 +176,18 @@ function CheckoutContent() {
                     disabled={!!session}
                   />
                   {!session && <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '6px' }}>We'll send order updates here.</div>}
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                  <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Telegram / WhatsApp (Optional)</label>
+                  <input 
+                    type="text" 
+                    className="form-input" 
+                    placeholder="@username or phone number" 
+                    value={contactSocial} 
+                    onChange={e => setContactSocial(e.target.value)} 
+                  />
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '6px' }}>For faster communication regarding your order.</div>
                 </div>
 
                 {!session && emailExists && (
@@ -196,10 +218,6 @@ function CheckoutContent() {
 
                     {createAccount && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingLeft: '28px', marginTop: '16px' }}>
-                        <div>
-                          <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Full Name (Optional)</label>
-                          <input type="text" className="form-input" placeholder="John Doe" value={name} onChange={e => setName(e.target.value)} />
-                        </div>
                         <div>
                           <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Password *</label>
                           <input type="password" className="form-input" placeholder="Create a password" value={password} onChange={e => setPassword(e.target.value)} />
