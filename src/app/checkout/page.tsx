@@ -7,6 +7,7 @@ import { PLATFORMS, COUNTRIES, calculatePrice, getPricePerReview, TextOption } f
 import { signIn, useSession } from 'next-auth/react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { Lock } from 'lucide-react'
 
 const URL_PLACEHOLDER: Record<string, string> = {
   google: 'https://maps.google.com/?cid=123456 or your Google Maps link',
@@ -315,7 +316,7 @@ function CheckoutContent() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '14px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                    <span>🔒</span> Secure checkout powered by Stripe
+                    <Lock size={14} /> Secure checkout powered by Stripe
                   </div>
                 </div>
               </div>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { Ticket } from 'lucide-react'
 
 const STATUS_STYLES: Record<string, string> = {
   open: 'badge-yellow',
@@ -79,7 +80,9 @@ export function TicketsClient({ initialTickets }: { initialTickets: any[] }) {
         <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
           {tickets.length === 0 && (
             <div className="bento-card" style={{textAlign:'center',padding:'60px',color:'var(--text-muted)'}}>
-              <div style={{fontSize:'3rem',marginBottom:'16px'}}>🎫</div>
+              <div style={{display:'flex',justifyContent:'center',marginBottom:'16px'}}>
+                <Ticket size={48} color="var(--text-muted)" />
+              </div>
               <h3 style={{marginBottom:'8px'}}>No tickets yet</h3>
               <p>If you have any issues, open a support ticket and we&apos;ll help you out.</p>
             </div>
@@ -90,7 +93,9 @@ export function TicketsClient({ initialTickets }: { initialTickets: any[] }) {
               className="ticket-card"
               onClick={() => handleOpenTicket(ticket)}
             >
-              <div className="ticket-icon">🎫</div>
+              <div className="ticket-icon">
+                <Ticket size={24} color="var(--accent)" />
+              </div>
               <div className="ticket-content">
                 <div className="ticket-subject">{ticket.subject}</div>
                 <div className="ticket-meta">

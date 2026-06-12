@@ -3,6 +3,7 @@ import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { ManageBillingButton } from '@/components/dashboard/ManageBillingButton'
+import { CreditCard, Receipt, Calendar } from 'lucide-react'
 
 const STATUS_STYLES: Record<string, string> = {
   paid: 'badge-green',
@@ -36,17 +37,17 @@ export default async function BillingPage() {
       {/* Stats */}
       <div className="bento-grid bento-grid-3" style={{marginBottom:'24px'}}>
         <div className="stat-card">
-          <div className="stat-card-label">💳 Total Spent</div>
+          <div className="stat-card-label" style={{display: 'flex', alignItems: 'center', gap: '8px'}}><CreditCard size={18} /> Total Spent</div>
           <div className="stat-card-value">${total.toFixed(2)}</div>
           <div className="stat-card-sub">All time</div>
         </div>
         <div className="stat-card">
-          <div className="stat-card-label">🧾 Invoices</div>
+          <div className="stat-card-label" style={{display: 'flex', alignItems: 'center', gap: '8px'}}><Receipt size={18} /> Invoices</div>
           <div className="stat-card-value">{payments.length}</div>
           <div className="stat-card-sub">Available</div>
         </div>
         <div className="stat-card">
-          <div className="stat-card-label">📅 Last Payment</div>
+          <div className="stat-card-label" style={{display: 'flex', alignItems: 'center', gap: '8px'}}><Calendar size={18} /> Last Payment</div>
           <div className="stat-card-value">${lastPayment.toFixed(2)}</div>
           <div className="stat-card-sub">{payments.length > 0 ? new Date(payments[0].createdAt).toLocaleDateString() : 'N/A'}</div>
         </div>

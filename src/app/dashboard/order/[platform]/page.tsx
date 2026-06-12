@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { PLATFORMS, COUNTRIES, calculatePrice, getPricePerReview } from '@/lib/data'
 import type { TextOption } from '@/lib/data'
+import { Lock } from 'lucide-react'
 
 export default function DashboardOrderPage({ params }: { params: Promise<{ platform: string }> }) {
   const { platform: platformId } = use(params)
@@ -213,7 +214,7 @@ export default function DashboardOrderPage({ params }: { params: Promise<{ platf
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                <span>🔒</span> Secure checkout powered by Stripe
+                <Lock size={14} /> Secure checkout powered by Stripe
               </div>
             </div>
           </div>
