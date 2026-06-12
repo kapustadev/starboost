@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, use } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { PLATFORMS, COUNTRIES, calculatePrice, getPricePerReview } from '@/lib/data'
@@ -39,8 +39,9 @@ const URL_PLACEHOLDER: Record<string, string> = {
   trustpilot: 'https://trustpilot.com/review/yourwebsite.com',
 }
 
-export default function ServicePage({ params }: { params: { platform: string } }) {
-  const platform = PLATFORMS.find(p => p.id === params.platform)
+export default function ServicePage({ params }: { params: Promise<{ platform: string }> }) {
+  const { platform: platformId } = use(params)
+  const platform = PLATFORMS.find(p => p.id === platformId)
 
   const [scrolled, setScrolled] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
