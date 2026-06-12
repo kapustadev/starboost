@@ -282,6 +282,12 @@ p { color: var(--text-secondary); }
 
 .form-input::placeholder { color: var(--text-muted); }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  filter: invert(1);
+  opacity: 1;
+}
+
 .form-input-icon {
   position: relative;
 }

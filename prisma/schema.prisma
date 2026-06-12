@@ -65,6 +65,8 @@ model Order {
   platform        String      // "google" | "facebook" | "trustpilot"
   country         String      // "us" | "pl" | "ua" | "gb" | "de" etc.
   quantity        Int
+  textOption      String      @default("none") // "none" | "client" | "ours"
+  frequency       String      @default("1/3days")
   pricePerReview  Float
   totalPrice      Float
   currency        String      @default("USD")

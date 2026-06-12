@@ -32,6 +32,7 @@ export default function HomePage() {
   const [selectedQty, setSelectedQty] = useState(10)
   const [customQty, setCustomQty] = useState('')
   const [textOption, setTextOption] = useState<TextOption>('none')
+  const [frequency, setFrequency] = useState('1/3days')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const dropdownRef = useRef<HTMLLIElement>(null)
 
@@ -362,6 +363,25 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
+
+              {/* Delivery Frequency */}
+              <div>
+                <label className="form-label" style={{ marginBottom: '12px', display: 'block' }}>Delivery Frequency</label>
+                <select
+                  className="form-input"
+                  value={frequency}
+                  onChange={e => setFrequency(e.target.value)}
+                >
+                  <option value="1/day">1 review per day</option>
+                  <option value="1/2days">1 review every 2 days</option>
+                  <option value="1/3days">1 review every 3 days (Recommended)</option>
+                  <option value="1/5days">1 review every 5 days</option>
+                  <option value="1/week">1 review per week</option>
+                </select>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '8px' }}>
+                  Slower delivery looks more natural to {platform.name}.
+                </div>
+              </div>
             </div>
 
             {/* RIGHT — Order Summary */}
@@ -398,8 +418,8 @@ export default function HomePage() {
                     <span style={{ fontWeight: 700, color: 'var(--accent)' }}>${pricePerReview}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem' }}>
-                    <span style={{ color: 'var(--text-muted)' }}>Delivery</span>
-                    <span style={{ fontWeight: 600, color: 'var(--green)' }}>{platform.deliveryDays} days</span>
+                    <span style={{ color: 'var(--text-muted)' }}>Delivery Frequency</span>
+                    <span style={{ fontWeight: 600, color: 'var(--green)' }}>{frequency === '1/day' ? 'Daily' : frequency.replace('1/', 'Every ').replace('days', ' days')}</span>
                   </div>
                 </div>
 
@@ -415,8 +435,8 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <Link href="/register" className="btn btn-primary btn-full btn-lg" style={{ justifyContent: 'center' }}>
-                  Order Now →
+                <Link href={`/services/${selectedPlatform}`} className="btn btn-primary btn-full btn-lg" style={{ justifyContent: 'center' }}>
+                  Configure & Order →
                 </Link>
 
                 <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>

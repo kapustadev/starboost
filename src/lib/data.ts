@@ -55,7 +55,7 @@ export const PLATFORMS = [
     id: 'facebook',
     name: 'Facebook Reviews',
     shortName: 'Facebook',
-    icon: '/icons/facebook.svg',
+    icon: '/icons/facebook.png',
     color: '#1877F2',
     basePrice: 8,
     description: 'Authentic 5-star Facebook page reviews and recommendations from real accounts.',
