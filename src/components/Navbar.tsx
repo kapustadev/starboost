@@ -10,7 +10,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
   const dropdownRef = useRef<HTMLLIElement>(null)
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,8 +112,10 @@ export default function Navbar() {
           </ul>
 
           <div className="navbar-actions">
-            {session ? (
-              <Link href="/dashboard" className="btn btn-primary btn-sm">Dashboard</Link>
+            {status === 'loading' ? (
+              <div style={{ width: '180px' }}></div>
+            ) : session ? (
+              <Link href="/dashboard" className="btn btn-primary btn-sm">Go to Dashboard</Link>
             ) : (
               <>
                 <Link href="/login" className="btn btn-ghost btn-sm">Sign In</Link>
