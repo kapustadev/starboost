@@ -184,7 +184,7 @@ export function RatingCalculatorClient() {
           </div>
 
           {!errorMsg && !successMsg && needed5Star > 0 && (
-            <Link href={`/services/${platform.id}`} className="btn btn-primary btn-full btn-lg" style={{ justifyContent: 'center', marginTop: '16px' }}>
+            <Link href={`/services/${platform.id}?qty=${needed5Star}`} className="btn btn-primary btn-full btn-lg" style={{ justifyContent: 'center', marginTop: '16px' }}>
               Order {platform.shortName} Reviews <ArrowRight size={18} />
             </Link>
           )}

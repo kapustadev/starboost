@@ -52,6 +52,25 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
   const [frequency, setFrequency] = useState('1/3days')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const qty = params.get('qty')
+      if (qty) {
+        setCustomQty(qty)
+        setSelectedQty(0)
+        
+        // Auto-scroll to pricing section if arriving with a pre-filled qty
+        setTimeout(() => {
+          const pricingEl = document.getElementById('pricing')
+          if (pricingEl) {
+            window.scrollTo({ top: pricingEl.offsetTop - 80, behavior: 'smooth' })
+          }
+        }, 300)
+      }
+    }
+  }, [])
+
   if (!platform) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-primary)' }}>
