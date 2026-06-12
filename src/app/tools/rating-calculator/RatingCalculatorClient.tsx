@@ -47,7 +47,7 @@ export function RatingCalculatorClient() {
               <Calculator color="var(--accent)" size={32} />
             </div>
             <div>
-              <h2 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>{platform.name} Review Calculator</h2>
+              <h2 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>{platform.shortName} Review Calculator</h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                 Find out exactly how many 5-star reviews your business needs to reach your desired average rating.
               </p>
