@@ -1,0 +1,12 @@
+
+> starboost@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.132:3000
+- Environments: .env
+✓ Ready in 183ms
+
+ GET /dashboard 307 in 953ms (next.js: 804ms, application-code: 149ms)
+✓ Compiled in 28ms

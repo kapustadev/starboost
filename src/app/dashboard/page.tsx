@@ -3,9 +3,7 @@ import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
-import { PayNowButton } from '@/components/dashboard/PayNowButton'
-import { OrderTimer } from '@/components/dashboard/OrderTimer'
-import { AlertTriangle } from 'lucide-react'
+import { UnpaidOrderAlert } from '@/components/dashboard/UnpaidOrderAlert'
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -13,14 +11,18 @@ export default async function DashboardPage() {
 
   // Automatically cancel pending orders older than 30 minutes
   const thirtyMinsAgo = new Date(Date.now() - 30 * 60 * 1000)
-  await prisma.order.updateMany({
-    where: {
-      userId: session.user.id,
-      status: 'pending',
-      createdAt: { lt: thirtyMinsAgo }
-    },
-    data: { status: 'cancelled' }
-  })
+  try {
+    await prisma.order.updateMany({
+      where: {
+        userId: session.user.id,
+        status: 'pending',
+        createdAt: { lt: thirtyMinsAgo }
+      },
+      data: { status: 'cancelled' }
+    })
+  } catch (e) {
+    console.error('Failed to auto-cancel orders', e)
+  }
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
@@ -55,31 +57,7 @@ export default async function DashboardPage() {
       {pendingOrders.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
           {pendingOrders.map(order => (
-            <div key={order.id} style={{
-              background: 'var(--accent-glow)',
-              border: '1px solid var(--accent)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '16px 20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '20px',
-              flexWrap: 'wrap'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <AlertTriangle color="var(--yellow)" size={28} />
-                <div>
-                  <h4 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    You have an unpaid order
-                    <OrderTimer createdAt={order.createdAt} />
-                  </h4>
-                  <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
-                    {order.quantity} {order.platform} reviews ({order.country.toUpperCase()}) for ${order.totalPrice}. Complete payment to start the campaign.
-                  </p>
-                </div>
-              </div>
-              <PayNowButton orderId={order.id} />
-            </div>
+            <UnpaidOrderAlert key={order.id} order={order} />
           ))}
         </div>
       )}

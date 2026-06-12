@@ -57,7 +57,37 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ url: stripeSession.url })
   } catch (error: any) {
-    console.error('Stripe Checkout Error:', error)
+    console.error('Stripe Existing Checkout Error:', error)
     return NextResponse.json({ message: error.message || 'Internal server error' }, { status: 500 })
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.email) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { orderId } = await req.json()
+    if (!orderId) {
+      return NextResponse.json({ message: 'Missing orderId' }, { status: 400 })
+    }
+
+    // Must belong to user and be pending
+    const order = await prisma.order.findUnique({ where: { id: orderId } })
+    if (!order || order.userId !== session.user.id || order.status !== 'pending') {
+      return NextResponse.json({ message: 'Not found or invalid' }, { status: 400 })
+    }
+
+    await prisma.order.update({
+      where: { id: orderId },
+      data: { status: 'cancelled' }
+    })
+
+    return NextResponse.json({ success: true })
+  } catch (error: any) {
+    console.error('Cancel order error:', error)
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 })
   }
 }
