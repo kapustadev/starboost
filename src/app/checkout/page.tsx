@@ -82,10 +82,23 @@ function CheckoutContent() {
   }
 
   const handleCheckout = async () => {
-    if (!targetUrl) {
+    let finalUrl = targetUrl.trim()
+    if (!finalUrl) {
       alert('Please enter your Business URL')
       return
     }
+
+    if (!/^https?:\/\//i.test(finalUrl)) {
+      finalUrl = 'https://' + finalUrl
+    }
+
+    try {
+      new URL(finalUrl)
+    } catch {
+      alert('Please enter a valid URL for your business (e.g. https://google.com/...)')
+      return
+    }
+
     if (!session && !email) {
       alert('Please enter your email address to receive order updates')
       return
@@ -116,7 +129,7 @@ function CheckoutContent() {
           quantity: qty,
           textOption,
           frequency,
-          targetUrl,
+          targetUrl: finalUrl,
           businessName,
           notes,
           pricePerReview,
