@@ -597,6 +597,7 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background: var(--bg-secondary);
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.15s ease;
   font-size: 0.9rem;
