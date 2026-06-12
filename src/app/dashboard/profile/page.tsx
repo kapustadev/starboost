@@ -31,7 +31,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'24px',alignItems:'start'}}>
+      <div className="bento-grid bento-grid-2" style={{ alignItems: 'start' }}>
         {/* Personal Info */}
         <div className="bento-card">
           <h3 style={{marginBottom:'24px'}}>Personal Information</h3>

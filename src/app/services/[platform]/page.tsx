@@ -162,7 +162,7 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
       {/* ── PRICING CALCULATOR ── */}
       <section className="section" id="pricing" style={{ paddingTop: 0 }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 440px', gap: '32px', alignItems: 'start' }}>
+          <div className="calculator-grid-wide">
             
             {/* LEFT — Info + features */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>

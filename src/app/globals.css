@@ -380,6 +380,29 @@ textarea.form-input { resize: vertical; min-height: 100px; }
 }
 
 /* ========================
+   CALCULATOR GRIDS
+======================== */
+.calculator-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: start;
+}
+
+.calculator-grid-wide {
+  display: grid;
+  grid-template-columns: 1fr 440px;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .calculator-grid, .calculator-grid-wide {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================
    HERO
 ======================== */
 .hero {

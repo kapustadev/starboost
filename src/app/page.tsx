@@ -215,7 +215,7 @@ export default function HomePage() {
             <p>Transparent pricing with no hidden fees. Pay only for what you need.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '24px', alignItems: 'start' }}>
+          <div className="calculator-grid">
             {/* LEFT — Configurator */}
             <div className="bento-card" style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
 

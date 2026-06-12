@@ -150,7 +150,7 @@ function CheckoutContent() {
         <div className="container">
           <h1 style={{ marginBottom: '40px', fontSize: '2.4rem' }}>Checkout</h1>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '32px', alignItems: 'start' }}>
+          <div className="calculator-grid" style={{ gap: '32px' }}>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               
