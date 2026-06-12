@@ -38,10 +38,10 @@ export async function POST(req: Request) {
       { user: { id: user.id, name: user.name, email: user.email } },
       { status: 201 }
     )
-  } catch (error) {
+  } catch (error: any) {
     console.error('Registration error:', error)
     return NextResponse.json(
-      { message: 'Internal server error' },
+      { message: 'Registration failed', error: error?.message || String(error) },
       { status: 500 }
     )
   }
