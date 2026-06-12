@@ -214,9 +214,9 @@ export default function HomePage() {
             <p>Transparent pricing with no hidden fees. Pay only for what you need.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '24px', alignItems: 'stretch' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '24px', alignItems: 'start' }}>
             {/* LEFT — Configurator */}
-            <div className="bento-card" style={{ display: 'flex', flexDirection: 'column', gap: '28px', height: '100%' }}>
+            <div className="bento-card" style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
 
               {/* Platform */}
               <div>
@@ -385,7 +385,7 @@ export default function HomePage() {
             </div>
 
             {/* RIGHT — Order Summary */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%', justifyContent: 'space-between' }}>
+            <div style={{ position: 'sticky', top: '96px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div className="bento-card accent-card">
                 <h3 style={{ marginBottom: '24px' }}>Order Summary</h3>
 
