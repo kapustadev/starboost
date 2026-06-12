@@ -18,7 +18,7 @@ export default function Footer() {
               {PLATFORMS.map(p => (
                 <li key={p.id}><Link href={`/services/${p.id}`}>{p.name}</Link></li>
               ))}
-              <li><Link href="/#pricing">Pricing Calculator</Link></li>
+              <li><Link href="/tools/rating-calculator">Rating Calculator</Link></li>
             </ul>
           </div>
           <div>
@@ -33,9 +33,9 @@ export default function Footer() {
           <div>
             <div className="footer-col-title">Legal</div>
             <ul className="footer-links">
-              <li><Link href="/terms">Terms of Service</Link></li>
-              <li><Link href="/privacy">Privacy Policy</Link></li>
-              <li><Link href="/refund">Refund Policy</Link></li>
+              <li><Link href="/terms-of-service">Terms of Service</Link></li>
+              <li><Link href="/privacy-policy">Privacy Policy</Link></li>
+              <li><Link href="/refund-policy">Refund Policy</Link></li>
               <li><a href="mailto:support@starsboost.com">Contact Us</a></li>
             </ul>
           </div>

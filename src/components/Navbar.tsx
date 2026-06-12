@@ -102,6 +102,30 @@ export default function Navbar() {
                       {p.name}
                     </Link>
                   ))}
+                  <div style={{ height: '1px', background: 'var(--border)', margin: '4px 0' }} />
+                  <Link
+                    href="/tools/rating-calculator"
+                    onClick={() => setServicesOpen(false)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '10px 14px',
+                      borderRadius: 'var(--radius-md)',
+                      color: 'var(--text-primary)',
+                      fontSize: '0.9rem',
+                      fontWeight: 500,
+                      transition: 'background 0.15s',
+                      textDecoration: 'none',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-secondary)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <div style={{ width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--accent-glow)', borderRadius: '6px' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="8" y="8" width="8" height="8"></rect></svg>
+                    </div>
+                    Rating Calculator
+                  </Link>
                 </div>
               )}
             </li>

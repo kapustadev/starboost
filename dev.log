@@ -10,3 +10,5 @@
 
  GET /dashboard 307 in 953ms (next.js: 804ms, application-code: 149ms)
 ✓ Compiled in 28ms
+✓ Compiled in 109ms
+✓ Compiled in 6ms
