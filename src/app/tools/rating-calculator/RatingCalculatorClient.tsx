@@ -10,6 +10,7 @@ export function RatingCalculatorClient() {
   const [currentRating, setCurrentRating] = useState('4.2')
   const [currentReviews, setCurrentReviews] = useState('150')
   const [desiredRating, setDesiredRating] = useState('4.5')
+  const [useRounding, setUseRounding] = useState(true)
 
   const platform = PLATFORMS.find(p => p.id === platformId) || PLATFORMS[0]
 
@@ -34,7 +35,10 @@ export function RatingCalculatorClient() {
       successMsg = 'You already have a perfect 5.0 rating!'
     }
   } else {
-    const needed = (currentN * (desiredR - currentR)) / (5 - desiredR)
+    // If using rounding and target is less than 5.0, subtract 0.05 to reach the rounding threshold (e.g., 4.85 rounds to 4.9)
+    const effectiveDesiredR = (useRounding && desiredR < 5.0) ? Math.max(currentR + 0.01, desiredR - 0.05) : desiredR
+    
+    const needed = (currentN * (effectiveDesiredR - currentR)) / (5 - effectiveDesiredR)
     needed5Star = Math.ceil(needed)
   }
 
@@ -144,6 +148,16 @@ export function RatingCalculatorClient() {
             />
           </div>
 
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+            <input 
+              type="checkbox" 
+              checked={useRounding} 
+              onChange={e => setUseRounding(e.target.checked)}
+              style={{ width: '16px', height: '16px', accentColor: 'var(--accent)' }}
+            />
+            Factor in rounding (e.g. 4.85 rounds to 4.9 display)
+          </label>
+
           <div style={{ height: '1px', background: 'var(--border)', margin: '24px 0' }} />
 
           <div style={{ textAlign: 'center', padding: '24px 0' }}>
@@ -160,7 +174,7 @@ export function RatingCalculatorClient() {
               <div>
                 <p style={{ color: 'var(--text-muted)', marginBottom: '8px' }}>You need approximately</p>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: '4rem', fontWeight: 800, color: 'var(--accent)', lineHeight: 1 }}>
-                  {needed5Star}
+                  {needed5Star.toLocaleString()}
                 </div>
                 <p style={{ color: 'var(--text-primary)', marginTop: '8px', fontWeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
                   new <Star size={18} color="var(--yellow)" fill="var(--yellow)" /> 5-star reviews
@@ -171,7 +185,7 @@ export function RatingCalculatorClient() {
 
           {!errorMsg && !successMsg && needed5Star > 0 && (
             <Link href={`/services/${platform.id}`} className="btn btn-primary btn-full btn-lg" style={{ justifyContent: 'center', marginTop: '16px' }}>
-              Buy {Math.min(needed5Star, 500)} {platform.shortName} Reviews <ArrowRight size={18} />
+              Order {platform.shortName} Reviews <ArrowRight size={18} />
             </Link>
           )}
         </div>
