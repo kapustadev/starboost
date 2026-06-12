@@ -16,11 +16,12 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts  Account[]
-  sessions  Session[]
-  orders    Order[]
-  tickets   Ticket[]
-  payments  Payment[]
+  accounts         Account[]
+  sessions         Session[]
+  orders           Order[]
+  tickets          Ticket[]
+  payments         Payment[]
+  stripeCustomerId String?
 }
 
 model Account {

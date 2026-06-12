@@ -3,13 +3,16 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
+import { LayoutDashboard, ShoppingBag, Ticket, CreditCard, User, ArrowLeft, LogOut } from 'lucide-react'
+import Image from 'next/image'
+import { PLATFORMS } from '@/lib/data'
 
 const NAV = [
-  { label: 'Overview', href: '/dashboard', icon: '◈' },
-  { label: 'My Orders', href: '/dashboard/orders', icon: '📦' },
-  { label: 'Support Tickets', href: '/dashboard/tickets', icon: '🎫' },
-  { label: 'Billing', href: '/dashboard/billing', icon: '💳' },
-  { label: 'Profile', href: '/dashboard/profile', icon: '👤' },
+  { label: 'Overview', href: '/dashboard', icon: <LayoutDashboard size={18} /> },
+  { label: 'My Orders', href: '/dashboard/orders', icon: <ShoppingBag size={18} /> },
+  { label: 'Support Tickets', href: '/dashboard/tickets', icon: <Ticket size={18} /> },
+  { label: 'Billing', href: '/dashboard/billing', icon: <CreditCard size={18} /> },
+  { label: 'Profile', href: '/dashboard/profile', icon: <User size={18} /> },
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -33,7 +36,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               href={item.href}
               className={`sidebar-link ${pathname === item.href ? 'active' : ''}`}
             >
-              <span style={{fontSize:'1rem'}}>{item.icon}</span>
+              <span style={{ display: 'flex', alignItems: 'center' }}>{item.icon}</span>
               {item.label}
             </Link>
           ))}
@@ -41,23 +44,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         <div className="sidebar-section" style={{marginTop:'16px'}}>
           <span className="sidebar-section-label">Quick Order</span>
-          <Link href="/services/google" className="sidebar-link">
-            <span>🅖</span> Google Reviews
-          </Link>
-          <Link href="/services/facebook" className="sidebar-link">
-            <span>📘</span> Facebook Reviews
-          </Link>
-          <Link href="/services/trustpilot" className="sidebar-link">
-            <span>⭐</span> Trustpilot Reviews
-          </Link>
+          {PLATFORMS.map(p => (
+            <Link key={p.id} href={`/dashboard/order/${p.id}`} className="sidebar-link">
+              <span style={{ display: 'flex', alignItems: 'center' }}>
+                <Image src={p.icon} alt={p.name} width={18} height={18} style={{ borderRadius: '4px' }} />
+              </span>
+              {p.shortName} Reviews
+            </Link>
+          ))}
         </div>
 
         <div className="sidebar-bottom">
           <Link href="/" className="sidebar-link">
-            <span>←</span> Back to Site
+            <span style={{ display: 'flex', alignItems: 'center' }}><ArrowLeft size={18} /></span> Back to Site
           </Link>
-          <button onClick={() => signOut({ callbackUrl: '/' })} className="sidebar-link btn-ghost" style={{width:'100%',textAlign:'left',border:'none',background:'none',color:'var(--red)',marginTop:'4px', cursor: 'pointer'}}>
-            <span>⏻</span> Sign Out
+          <button onClick={() => signOut({ callbackUrl: '/' })} className="sidebar-link btn-ghost" style={{width:'100%',textAlign:'left',border:'none',background:'none',color:'var(--red)',marginTop:'4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px'}}>
+            <span style={{ display: 'flex', alignItems: 'center' }}><LogOut size={18} /></span> Sign Out
           </button>
         </div>
       </aside>

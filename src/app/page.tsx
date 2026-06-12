@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { PLATFORMS, COUNTRIES, calculatePrice, getPricePerReview } from '@/lib/data'
 import Footer from '@/components/Footer'
+import { useSession } from 'next-auth/react'
 import type { TextOption } from '@/lib/data'
 
 const TESTIMONIALS = [
@@ -26,6 +27,7 @@ const FAQS = [
 ]
 
 export default function HomePage() {
+  const { data: session, status } = useSession()
   const [scrolled, setScrolled] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
   const [selectedPlatform, setSelectedPlatform] = useState('google')
@@ -141,8 +143,16 @@ export default function HomePage() {
             </ul>
 
             <div className="navbar-actions">
-              <Link href="/login" className="btn btn-ghost btn-sm">Sign In</Link>
-              <Link href="/register" className="btn btn-primary btn-sm">Get Started</Link>
+              {status === 'loading' ? (
+                <div style={{ width: '150px', height: '32px' }} />
+              ) : session ? (
+                <Link href="/dashboard" className="btn btn-primary btn-sm">Go to Dashboard</Link>
+              ) : (
+                <>
+                  <Link href="/login" className="btn btn-ghost btn-sm">Sign In</Link>
+                  <Link href="/register" className="btn btn-primary btn-sm">Get Started</Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -550,7 +560,13 @@ export default function HomePage() {
               Join 2,000+ businesses already using StarsBoost to build trust and attract more customers.
             </p>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link href="/register" className="btn btn-primary btn-lg">Start Now →</Link>
+              {status === 'loading' ? (
+                <div style={{ width: '150px', height: '48px' }} />
+              ) : session ? (
+                <Link href="/dashboard" className="btn btn-primary btn-lg">Go to Dashboard →</Link>
+              ) : (
+                <Link href="/register" className="btn btn-primary btn-lg">Start Now →</Link>
+              )}
               <Link href="#pricing" className="btn btn-secondary btn-lg">View Pricing</Link>
             </div>
           </div>
