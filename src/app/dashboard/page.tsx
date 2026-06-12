@@ -3,6 +3,7 @@ import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import { PayNowButton } from '@/components/dashboard/PayNowButton'
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -12,17 +13,19 @@ export default async function DashboardPage() {
     where: { id: session.user.id },
     include: {
       orders: {
-        orderBy: { createdAt: 'desc' },
-        take: 5
+        orderBy: { createdAt: 'desc' }
       }
     }
   })
 
   if (!user) redirect('/login')
 
-  const totalSpent = user.orders.reduce((sum, order) => sum + (order.status !== 'cancelled' ? order.totalPrice : 0), 0)
-  const totalReviews = user.orders.reduce((sum, order) => sum + (order.status !== 'cancelled' ? order.quantity : 0), 0)
-  const activeOrders = user.orders.filter(o => o.status === 'processing' || o.status === 'pending').length
+  const totalSpent = user.orders.reduce((sum, order) => sum + (order.status !== 'cancelled' && order.status !== 'pending' ? order.totalPrice : 0), 0)
+  const totalReviews = user.orders.reduce((sum, order) => sum + (order.status !== 'cancelled' && order.status !== 'pending' ? order.quantity : 0), 0)
+  const activeOrders = user.orders.filter(o => o.status === 'processing').length
+  const pendingOrders = user.orders.filter(o => o.status === 'pending')
+
+  const recentOrders = user.orders.slice(0, 5)
 
   return (
     <>
@@ -31,10 +34,39 @@ export default async function DashboardPage() {
           <h1 style={{ marginBottom: '4px' }}>Welcome back, {user.name || 'User'}!</h1>
           <p style={{ color: 'var(--text-muted)' }}>Here is what&apos;s happening with your projects today.</p>
         </div>
-        <Link href="/services/google" className="btn btn-primary">
+        <Link href="/dashboard/order/google" className="btn btn-primary">
           + New Order
         </Link>
       </div>
+
+      {pendingOrders.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
+          {pendingOrders.map(order => (
+            <div key={order.id} style={{
+              background: 'var(--accent-glow)',
+              border: '1px solid var(--accent)',
+              borderRadius: 'var(--radius-lg)',
+              padding: '16px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '20px',
+              flexWrap: 'wrap'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span style={{ fontSize: '1.5rem' }}>⚠️</span>
+                <div>
+                  <h4 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '1rem' }}>You have an unpaid order</h4>
+                  <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                    {order.quantity} {order.platform} reviews ({order.country.toUpperCase()}) for ${order.totalPrice}. Complete payment to start the campaign.
+                  </p>
+                </div>
+              </div>
+              <PayNowButton orderId={order.id} />
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* STATS */}
       <div className="bento-grid bento-grid-3" style={{ marginBottom: '32px' }}>
@@ -61,7 +93,7 @@ export default async function DashboardPage() {
           <h3 style={{ fontSize: '1.1rem' }}>Recent Orders</h3>
           <Link href="/dashboard/orders" className="btn btn-ghost btn-sm">View All →</Link>
         </div>
-        {user.orders.length > 0 ? (
+        {recentOrders.length > 0 ? (
           <table className="table" style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left' }}>
@@ -73,7 +105,7 @@ export default async function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {user.orders.map(order => (
+              {recentOrders.map(order => (
                 <tr key={order.id} style={{ borderBottom: '1px solid var(--border)' }}>
                   <td style={{ padding: '16px 24px', fontWeight: 500, textTransform: 'capitalize' }}>
                     {order.platform}
@@ -98,7 +130,7 @@ export default async function DashboardPage() {
           </table>
         ) : (
           <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
-            No orders found. <Link href="/services/google" style={{ color: 'var(--accent)' }}>Create your first order</Link>.
+            No orders found. <Link href="/dashboard/order/google" style={{ color: 'var(--accent)' }}>Create your first order</Link>.
           </div>
         )}
       </div>
