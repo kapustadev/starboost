@@ -93,7 +93,7 @@ function CheckoutContent() {
     if (emailExists && !session && password) {
       const res = await signIn('credentials', { redirect: false, email, password })
       if (res?.error) {
-        alert('Invalid password for existing account.')
+        alert(res.error)
         setLoading(false)
         return
       }

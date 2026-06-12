@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 
 const NAV = [
   { label: 'Overview', href: '/dashboard', icon: '◈' },
@@ -18,9 +19,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="dashboard-layout">
       {/* Sidebar */}
       <aside className="sidebar">
-        <div className="sidebar-logo">
-          Stars<span>Boost</span>
-        </div>
+        <Link href="/" style={{ textDecoration: 'none' }}>
+          <div className="sidebar-logo">
+            Stars<span>Boost</span>
+          </div>
+        </Link>
 
         <div className="sidebar-section">
           <span className="sidebar-section-label">Menu</span>
@@ -53,7 +56,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <Link href="/" className="sidebar-link">
             <span>←</span> Back to Site
           </Link>
-          <button className="sidebar-link btn-ghost" style={{width:'100%',textAlign:'left',border:'none',background:'none',color:'var(--red)',marginTop:'4px'}}>
+          <button onClick={() => signOut({ callbackUrl: '/' })} className="sidebar-link btn-ghost" style={{width:'100%',textAlign:'left',border:'none',background:'none',color:'var(--red)',marginTop:'4px', cursor: 'pointer'}}>
             <span>⏻</span> Sign Out
           </button>
         </div>

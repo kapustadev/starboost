@@ -38,16 +38,17 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null
+        if (!credentials?.email || !credentials?.password) throw new Error("Please enter both email and password")
         const user = await prisma.user.findUnique({
           where: { email: credentials.email as string },
         })
-        if (!user || !user.password) return null
+        if (!user) throw new Error("No account found with this email")
+        if (!user.password) throw new Error("This email is connected via social login. Please use Google or Facebook.")
         const isValid = await bcrypt.compare(
           credentials.password as string,
           user.password
         )
-        if (!isValid) return null
+        if (!isValid) throw new Error("Incorrect password")
         return user
       },
     }),

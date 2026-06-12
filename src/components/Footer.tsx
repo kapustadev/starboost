@@ -7,7 +7,9 @@ export default function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div>
-            <div className="footer-brand-name">Stars<span>Boost</span></div>
+            <Link href="/" style={{ textDecoration: 'none' }}>
+              <div className="footer-brand-name">Stars<span>Boost</span></div>
+            </Link>
             <p className="footer-desc">Real, verified reviews from real accounts. Boost your business reputation with geo-targeted reviews on Google, Facebook, and Trustpilot.</p>
           </div>
           <div>

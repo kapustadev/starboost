@@ -23,7 +23,7 @@ export default function LoginPage() {
       })
 
       if (res?.error) {
-        setError('Invalid email or password')
+        setError(res.error)
         setLoading(false)
       } else {
         window.location.href = '/dashboard'
