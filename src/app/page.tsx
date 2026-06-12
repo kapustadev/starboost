@@ -448,8 +448,12 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <Link href={`/services/${selectedPlatform}`} className="btn btn-primary btn-full btn-lg" style={{ justifyContent: 'center' }}>
-                  Configure & Order →
+                <Link 
+                  href={`/checkout?platform=${platform.id}&qty=${effectiveQty}&country=${selectedCountry}&textOption=${textOption}&frequency=${encodeURIComponent(frequency)}`} 
+                  className="btn btn-primary btn-full btn-lg" 
+                  style={{ justifyContent: 'center' }}
+                >
+                  Continue to Checkout →
                 </Link>
 
                 <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
