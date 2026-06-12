@@ -296,7 +296,7 @@ export default function ServicePage({ params }: { params: { platform: string } }
                       value={customQty}
                       onChange={e => { setCustomQty(e.target.value); setSelectedQty(0) }}
                       style={{
-                        width: '90px', padding: '10px 12px', borderRadius: 'var(--radius-md)',
+                        width: '130px', padding: '10px 12px', borderRadius: 'var(--radius-md)',
                         border: customQty !== '' ? '1px solid var(--accent)' : '1px solid var(--border)',
                         background: customQty !== '' ? 'var(--accent-glow)' : 'var(--bg-secondary)',
                         color: 'var(--text-primary)', fontSize: '0.88rem', fontWeight: 600, outline: 'none', fontFamily: 'inherit',
