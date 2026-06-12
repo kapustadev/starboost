@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { PLATFORMS, COUNTRIES, calculatePrice, getPricePerReview } from '@/lib/data'
+import Footer from '@/components/Footer'
 import type { TextOption } from '@/lib/data'
 
 const TESTIMONIALS = [
@@ -239,12 +240,13 @@ export default function HomePage() {
               {/* Quantity */}
               <div>
                 <label className="form-label" style={{ marginBottom: '12px', display: 'block' }}>Number of Reviews</label>
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center', width: '100%' }}>
                   {platform.packages.map(qty => (
                     <button
                       key={qty}
                       className={`package-btn ${selectedQty === qty && customQty === '' ? 'active' : ''}`}
                       onClick={() => { setSelectedQty(qty); setCustomQty('') }}
+                      style={{ padding: '10px 14px', flex: '0 0 auto' }}
                     >
                       {qty}
                     </button>
@@ -256,7 +258,8 @@ export default function HomePage() {
                     value={customQty}
                     onChange={e => { setCustomQty(e.target.value); setSelectedQty(0) }}
                     style={{
-                      width: '130px',
+                      flex: 1,
+                      minWidth: '90px',
                       padding: '10px 14px',
                       borderRadius: 'var(--radius-md)',
                       border: customQty !== '' ? '1px solid var(--accent)' : '1px solid var(--border)',
@@ -555,47 +558,7 @@ export default function HomePage() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-grid">
-            <div>
-              <div className="footer-brand-name">Stars<span>Boost</span></div>
-              <p className="footer-desc">Real, verified reviews from real accounts. Boost your business reputation with geo-targeted reviews on Google, Facebook, and Trustpilot.</p>
-            </div>
-            <div>
-              <div className="footer-col-title">Services</div>
-              <ul className="footer-links">
-                {PLATFORMS.map(p => (
-                  <li key={p.id}><Link href={`/services/${p.id}`}>{p.name}</Link></li>
-                ))}
-                <li><Link href="#pricing">Pricing Calculator</Link></li>
-              </ul>
-            </div>
-            <div>
-              <div className="footer-col-title">Account</div>
-              <ul className="footer-links">
-                <li><Link href="/login">Sign In</Link></li>
-                <li><Link href="/register">Register</Link></li>
-                <li><Link href="/dashboard">Dashboard</Link></li>
-                <li><Link href="/dashboard/orders">My Orders</Link></li>
-              </ul>
-            </div>
-            <div>
-              <div className="footer-col-title">Legal</div>
-              <ul className="footer-links">
-                <li><Link href="/terms">Terms of Service</Link></li>
-                <li><Link href="/privacy">Privacy Policy</Link></li>
-                <li><Link href="/refund">Refund Policy</Link></li>
-                <li><a href="mailto:support@starsboost.com">Contact Us</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <span>© 2025 StarsBoost. All rights reserved.</span>
-            <span>🔒 Payments secured by Stripe</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </>
   )
 }

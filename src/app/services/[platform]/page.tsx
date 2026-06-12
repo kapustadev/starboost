@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { PLATFORMS, COUNTRIES, calculatePrice, getPricePerReview } from '@/lib/data'
 import type { TextOption } from '@/lib/data'
 import { useSession } from 'next-auth/react'
+import Footer from '@/components/Footer'
 
 const TESTIMONIALS: Record<string, any[]> = {
   google: [
@@ -231,12 +232,13 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
                 {/* Quantity */}
                 <div style={{ marginBottom: '20px' }}>
                   <label className="form-label" style={{ marginBottom: '10px', display: 'block' }}>Number of Reviews</label>
-                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center', width: '100%' }}>
                     {platform.packages.map(qty => (
                       <button
                         key={qty}
                         className={`package-btn ${selectedQty === qty && customQty === '' ? 'active' : ''}`}
                         onClick={() => { setSelectedQty(qty); setCustomQty('') }}
+                        style={{ padding: '10px 14px', flex: '0 0 auto' }}
                       >
                         {qty}
                       </button>
@@ -248,7 +250,7 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
                       value={customQty}
                       onChange={e => { setCustomQty(e.target.value); setSelectedQty(0) }}
                       style={{
-                        width: '130px', padding: '10px 12px', borderRadius: 'var(--radius-md)',
+                        flex: 1, minWidth: '90px', padding: '10px 12px', borderRadius: 'var(--radius-md)',
                         border: customQty !== '' ? '1px solid var(--accent)' : '1px solid var(--border)',
                         background: customQty !== '' ? 'var(--accent-glow)' : 'var(--bg-secondary)',
                         color: 'var(--text-primary)', fontSize: '0.88rem', fontWeight: 600, outline: 'none', fontFamily: 'inherit',
@@ -424,6 +426,36 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
         </div>
       </section>
 
+      {/* ── SEO CONTENT ── */}
+      <section className="section">
+        <div className="container" style={{ maxWidth: '800px' }}>
+          <div className="bento-card" style={{ padding: '40px', background: 'var(--bg-secondary)', border: 'none' }}>
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '20px' }}>Why Buy {platform.name} Reviews?</h2>
+            {platform.id === 'google' && (
+              <div style={{ lineHeight: 1.8, color: 'var(--text-secondary)' }}>
+                <p style={{ marginBottom: '16px' }}><strong>Google Reviews</strong> are the single most important factor for local SEO and Google Maps rankings. When potential customers search for services in your area, the businesses with the highest ratings and most reviews naturally attract the majority of clicks and foot traffic.</p>
+                <p style={{ marginBottom: '16px' }}>Buying high-quality, verified Google reviews helps you establish instant credibility. It signals to Google's algorithm that your business is popular and trustworthy, which can significantly improve your visibility in the "Local Pack" (the top 3 map results).</p>
+                <p>Our reviewers use aged, active accounts with local IP addresses to ensure every review sticks and contributes positively to your overall rating and online reputation.</p>
+              </div>
+            )}
+            {platform.id === 'facebook' && (
+              <div style={{ lineHeight: 1.8, color: 'var(--text-secondary)' }}>
+                <p style={{ marginBottom: '16px' }}><strong>Facebook</strong> is more than just a social network; it's a powerful discovery engine. People often check a business's Facebook page to see recent activity, community engagement, and most importantly, what other customers are saying.</p>
+                <p style={{ marginBottom: '16px' }}>Having a strong foundation of positive Facebook reviews (Recommendations) serves as vital social proof. It reassures new visitors that your brand is legitimate and highly regarded by the community.</p>
+                <p>By buying real Facebook reviews, you can kickstart your page's growth, improve conversion rates on your Facebook Ads, and build a trustworthy social media presence that turns followers into loyal customers.</p>
+              </div>
+            )}
+            {platform.id === 'trustpilot' && (
+              <div style={{ lineHeight: 1.8, color: 'var(--text-secondary)' }}>
+                <p style={{ marginBottom: '16px' }}><strong>Trustpilot</strong> is widely recognized as the gold standard for independent business reviews, especially for e-commerce, SaaS, and online services. A high TrustScore is a powerful conversion tool that directly impacts buyer confidence.</p>
+                <p style={{ marginBottom: '16px' }}>Consumers are increasingly cautious. When they see a strong Trustpilot rating, hesitation drops and checkout rates increase. Buying verified Trustpilot reviews from real accounts helps you overcome initial skepticism and stand out from competitors.</p>
+                <p>Because Trustpilot has strict filtering algorithms, we use carefully aged profiles and natural delivery patterns to ensure your new reviews are published safely and remain permanently on your profile.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* ── FAQ ── */}
       <section className="section section-sm" id="faq" style={{ background: 'var(--bg-secondary)' }}>
         <div className="container" style={{ maxWidth: '760px' }}>
@@ -447,15 +479,7 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-bottom" style={{ borderTop: 'none', paddingTop: 0 }}>
-            <span>© 2025 StarsBoost. All rights reserved.</span>
-            <span>🔒 Payments secured by Stripe</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </>
   )
 }
