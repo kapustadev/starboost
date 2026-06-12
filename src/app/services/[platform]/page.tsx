@@ -5,8 +5,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { PLATFORMS, COUNTRIES, calculatePrice, getPricePerReview } from '@/lib/data'
 import type { TextOption } from '@/lib/data'
-import { useSession } from 'next-auth/react'
 import Footer from '@/components/Footer'
+import Navbar from '@/components/Navbar'
 
 const TESTIMONIALS: Record<string, any[]> = {
   google: [
@@ -44,7 +44,6 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
   const { platform: platformId } = use(params)
   const platform = PLATFORMS.find(p => p.id === platformId)
 
-  const [scrolled, setScrolled] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
   const [selectedCountry, setSelectedCountry] = useState('us')
   const [selectedQty, setSelectedQty] = useState(10)
@@ -52,23 +51,6 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
   const [textOption, setTextOption] = useState<TextOption>('none')
   const [frequency, setFrequency] = useState('1/3days')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
-  const dropdownRef = useRef<HTMLLIElement>(null)
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setServicesOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
 
   if (!platform) {
     return (
@@ -89,57 +71,7 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
 
   return (
     <>
-      {/* ── NAVBAR ── */}
-      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-        <div className="container">
-          <div className="navbar-inner">
-            <Link href="/" className="navbar-logo">Stars<span>Boost</span></Link>
-
-            <ul className="navbar-nav">
-              <li style={{ position: 'relative' }} ref={dropdownRef}>
-                <button
-                  onClick={() => setServicesOpen(v => !v)}
-                  style={{
-                    padding: '8px 14px', borderRadius: 'var(--radius-md)', fontSize: '0.9rem', fontWeight: 500,
-                    color: servicesOpen ? 'var(--text-primary)' : 'var(--text-secondary)',
-                    background: servicesOpen ? 'var(--bg-card)' : 'transparent',
-                    border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
-                    transition: 'all 0.2s', fontFamily: 'inherit',
-                  }}
-                >
-                  Services
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: servicesOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
-                    <path d="M6 9l6 6 6-6"/>
-                  </svg>
-                </button>
-
-                {servicesOpen && (
-                  <div style={{
-                    position: 'absolute', top: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)',
-                    background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-xl)',
-                    padding: '8px', minWidth: '240px', boxShadow: 'var(--shadow-lg)', zIndex: 200,
-                  }}>
-                    {PLATFORMS.map(p => (
-                      <Link key={p.id} href={`/services/${p.id}`} onClick={() => setServicesOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', borderRadius: 'var(--radius-md)', color: 'var(--text-primary)', fontSize: '0.9rem', fontWeight: 500, transition: 'background 0.15s' }} onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-secondary)')} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                        <Image src={p.icon} alt={p.name} width={24} height={24} style={{ borderRadius: '6px' }} />
-                        {p.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </li>
-              <li><Link href="#pricing">Pricing</Link></li>
-              <li><Link href="#how">How it works</Link></li>
-              <li><Link href="#faq">FAQ</Link></li>
-            </ul>
-
-            <div className="navbar-actions">
-              <Link href="/login" className="btn btn-ghost btn-sm">Sign In</Link>
-              <Link href="/register" className="btn btn-primary btn-sm">Get Started</Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* ── HERO ── */}
       <section className="hero" style={{ padding: '120px 0 80px', minHeight: 'auto' }}>

@@ -3,11 +3,15 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Calculator, Star, AlertCircle, ArrowRight } from 'lucide-react'
+import { PLATFORMS } from '@/lib/data'
 
 export function RatingCalculatorClient() {
+  const [platformId, setPlatformId] = useState('google')
   const [currentRating, setCurrentRating] = useState('4.2')
   const [currentReviews, setCurrentReviews] = useState('150')
   const [desiredRating, setDesiredRating] = useState('4.5')
+
+  const platform = PLATFORMS.find(p => p.id === platformId) || PLATFORMS[0]
 
   const currentR = parseFloat(currentRating)
   const currentN = parseInt(currentReviews)
@@ -30,7 +34,6 @@ export function RatingCalculatorClient() {
       successMsg = 'You already have a perfect 5.0 rating!'
     }
   } else {
-    // Formula: X = (N * (Rd - Rc)) / (5 - Rd)
     const needed = (currentN * (desiredR - currentR)) / (5 - desiredR)
     needed5Star = Math.ceil(needed)
   }
@@ -43,7 +46,7 @@ export function RatingCalculatorClient() {
             <Calculator color="var(--accent)" size={32} />
           </div>
           <div>
-            <h2 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>Google Review Calculator</h2>
+            <h2 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>{platform.name} Review Calculator</h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
               Find out exactly how many 5-star reviews your business needs to reach your desired average rating.
             </p>
@@ -52,16 +55,50 @@ export function RatingCalculatorClient() {
 
         <div className="bento-card">
           <h3 style={{ marginBottom: '20px' }}>Why does your rating matter?</h3>
-          <ul className="feature-list">
-            <li><strong>Higher trust:</strong> 87% of consumers won't consider a business with a rating below 3.3.</li>
-            <li><strong>More visibility:</strong> Google maps prioritizes businesses with higher ratings and more reviews.</li>
-            <li><strong>Increased conversions:</strong> A 0.1 increase in star rating can boost conversion rates by up to 25%.</li>
+          <ul style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '16px', 
+            listStyle: 'none', 
+            padding: 0, 
+            margin: 0,
+            color: 'var(--text-secondary)',
+            lineHeight: 1.6
+          }}>
+            <li style={{ display: 'flex', gap: '12px' }}>
+              <span style={{ color: 'var(--accent)', flexShrink: 0 }}>✓</span>
+              <span><strong>Higher trust:</strong> 87% of consumers won't consider a business with a rating below 3.3.</span>
+            </li>
+            <li style={{ display: 'flex', gap: '12px' }}>
+              <span style={{ color: 'var(--accent)', flexShrink: 0 }}>✓</span>
+              <span><strong>More visibility:</strong> Algorithms prioritize businesses with higher ratings and more reviews.</span>
+            </li>
+            <li style={{ display: 'flex', gap: '12px' }}>
+              <span style={{ color: 'var(--accent)', flexShrink: 0 }}>✓</span>
+              <span><strong>Increased conversions:</strong> A 0.1 increase in star rating can boost conversion rates by up to 25%.</span>
+            </li>
           </ul>
         </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div className="bento-card accent-card">
+          <div style={{ marginBottom: '20px' }}>
+            <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Platform</label>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              {PLATFORMS.map(p => (
+                <button
+                  key={p.id}
+                  className={`package-btn ${platformId === p.id ? 'active' : ''}`}
+                  onClick={() => setPlatformId(p.id)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px' }}
+                >
+                  {p.shortName}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div style={{ marginBottom: '20px' }}>
             <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Current Average Rating</label>
             <input 
@@ -105,8 +142,8 @@ export function RatingCalculatorClient() {
 
           <div style={{ textAlign: 'center', padding: '24px 0' }}>
             {errorMsg ? (
-              <div style={{ color: 'var(--red)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                <AlertCircle size={20} />
+              <div style={{ color: 'var(--red)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', textAlign: 'left', lineHeight: 1.5 }}>
+                <AlertCircle size={20} style={{ flexShrink: 0 }} />
                 <span>{errorMsg}</span>
               </div>
             ) : successMsg ? (
@@ -127,8 +164,8 @@ export function RatingCalculatorClient() {
           </div>
 
           {!errorMsg && !successMsg && needed5Star > 0 && (
-            <Link href={`/services/google`} className="btn btn-primary btn-full btn-lg" style={{ justifyContent: 'center', marginTop: '16px' }}>
-              Buy {Math.min(needed5Star, 500)} Google Reviews <ArrowRight size={18} />
+            <Link href={`/services/${platform.id}`} className="btn btn-primary btn-full btn-lg" style={{ justifyContent: 'center', marginTop: '16px' }}>
+              Buy {Math.min(needed5Star, 500)} {platform.shortName} Reviews <ArrowRight size={18} />
             </Link>
           )}
         </div>
