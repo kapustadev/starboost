@@ -41,15 +41,35 @@ export function RatingCalculatorClient() {
   return (
     <div className="calculator-grid-wide" style={{ marginTop: '24px' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        <div className="bento-card" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <div style={{ padding: '16px', background: 'var(--accent-glow)', borderRadius: '12px' }}>
-            <Calculator color="var(--accent)" size={32} />
+        <div className="bento-card" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+            <div style={{ padding: '16px', background: 'var(--accent-glow)', borderRadius: '12px', flexShrink: 0 }}>
+              <Calculator color="var(--accent)" size={32} />
+            </div>
+            <div>
+              <h2 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>{platform.name} Review Calculator</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                Find out exactly how many 5-star reviews your business needs to reach your desired average rating.
+              </p>
+            </div>
           </div>
+
+          <div style={{ height: '1px', background: 'var(--border)' }} />
+
           <div>
-            <h2 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>{platform.name} Review Calculator</h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-              Find out exactly how many 5-star reviews your business needs to reach your desired average rating.
-            </p>
+            <label className="form-label" style={{ marginBottom: '10px', display: 'block' }}>Select Platform</label>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              {PLATFORMS.map(p => (
+                <button
+                  key={p.id}
+                  className={`package-btn ${platformId === p.id ? 'active' : ''}`}
+                  onClick={() => setPlatformId(p.id)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px' }}
+                >
+                  {p.shortName}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -83,21 +103,7 @@ export function RatingCalculatorClient() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div className="bento-card accent-card">
-          <div style={{ marginBottom: '20px' }}>
-            <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Platform</label>
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              {PLATFORMS.map(p => (
-                <button
-                  key={p.id}
-                  className={`package-btn ${platformId === p.id ? 'active' : ''}`}
-                  onClick={() => setPlatformId(p.id)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px' }}
-                >
-                  {p.shortName}
-                </button>
-              ))}
-            </div>
-          </div>
+
 
           <div style={{ marginBottom: '20px' }}>
             <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Current Average Rating</label>
