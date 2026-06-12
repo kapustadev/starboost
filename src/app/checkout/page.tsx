@@ -139,6 +139,9 @@ function CheckoutContent() {
     } catch (err) {
       alert('An error occurred during checkout')
       setLoading(false)
+    }
+  }
+
   return (
     <>
       <Navbar />
