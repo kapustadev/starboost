@@ -20,6 +20,7 @@ export async function POST(req: Request) {
       notes,
       pricePerReview,
       totalPrice,
+      promoCode,
       email,
       createAccount,
       password,
@@ -50,6 +51,19 @@ export async function POST(req: Request) {
       finalUserId = newUser.id
     }
 
+    let actualTotalPrice = totalPrice
+    let discountAmount = 0
+    let promoCodeId = null
+
+    if (promoCode) {
+      const promo = await prisma.promoCode.findUnique({ where: { code: promoCode.toUpperCase() } })
+      if (promo && promo.active) {
+        promoCodeId = promo.id
+        discountAmount = totalPrice * (promo.discountPercentage / 100)
+        actualTotalPrice = Math.max(0, totalPrice - discountAmount)
+      }
+    }
+
     // Create Order in DB
     const order = await prisma.order.create({
       data: {
@@ -66,7 +80,9 @@ export async function POST(req: Request) {
         contactName: name || null,
         contactSocial: contactSocial || null,
         pricePerReview,
-        totalPrice,
+        totalPrice: actualTotalPrice,
+        promoCodeId,
+        discountAmount,
         status: 'pending'
       }
     })
@@ -84,7 +100,7 @@ export async function POST(req: Request) {
               name: `${quantity} ${platform.charAt(0).toUpperCase() + platform.slice(1)} Reviews (${country.toUpperCase()})`,
               description: `Frequency: ${frequency.replace('1/', '1 per ')} | Text: ${textOption}`,
             },
-            unit_amount: Math.round(totalPrice * 100), // convert to cents
+            unit_amount: Math.round(actualTotalPrice * 100), // convert to cents
           },
           quantity: 1,
         },

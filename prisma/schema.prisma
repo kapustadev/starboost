@@ -80,12 +80,15 @@ model Order {
   contactName     String?
   contactSocial   String?
   stripePaymentId String?
+  promoCodeId     String?
+  discountAmount  Float       @default(0)
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
-  user     User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tickets  Ticket[]
-  payment  Payment?
+  user      User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tickets   Ticket[]
+  payment   Payment?
+  promoCode PromoCode?  @relation(fields: [promoCodeId], references: [id])
 }
 
 model Ticket {
@@ -126,3 +129,15 @@ model Payment {
   user  User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
+
+model PromoCode {
+  id                 String   @id @default(cuid())
+  code               String   @unique
+  discountPercentage Float
+  active             Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  orders Order[]
+}
+

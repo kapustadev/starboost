@@ -42,7 +42,41 @@ function CheckoutContent() {
   const [createAccount, setCreateAccount] = useState(false)
   const [emailExists, setEmailExists] = useState(false)
   
+  const [promoCodeInput, setPromoCodeInput] = useState('')
+  const [appliedPromo, setAppliedPromo] = useState<{code: string, discount: number} | null>(null)
+  const [promoError, setPromoError] = useState('')
+  const [promoLoading, setPromoLoading] = useState(false)
+
   const [loading, setLoading] = useState(false)
+
+  const handleApplyPromo = async () => {
+    if (!promoCodeInput) return
+    setPromoLoading(true)
+    setPromoError('')
+    try {
+      const res = await fetch(`/api/promo/validate?code=${encodeURIComponent(promoCodeInput)}`)
+      const data = await res.json()
+      if (data.valid) {
+        setAppliedPromo({ code: data.code, discount: data.discountPercentage })
+        setPromoCodeInput('')
+      } else {
+        setPromoError(data.message || 'Invalid code')
+        setAppliedPromo(null)
+      }
+    } catch (e) {
+      setPromoError('Validation failed')
+    } finally {
+      setPromoLoading(false)
+    }
+  }
+
+  const removePromo = () => {
+    setAppliedPromo(null)
+    setPromoError('')
+  }
+  
+  const discountAmount = appliedPromo ? (totalPrice * (appliedPromo.discount / 100)) : 0
+  const finalPrice = Math.max(0, totalPrice - discountAmount)
 
   useEffect(() => {
     if (session?.user?.email) {
@@ -135,6 +169,8 @@ function CheckoutContent() {
           notes,
           pricePerReview,
           totalPrice,
+          finalPrice,
+          promoCode: appliedPromo?.code,
           email,
           createAccount,
           password,
@@ -273,6 +309,24 @@ function CheckoutContent() {
               <div className="bento-card accent-card">
                 <h3 style={{ marginBottom: '24px' }}>Order Summary</h3>
                 
+                <div style={{ marginBottom: '20px' }}>
+                  <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Promo Code</label>
+                  {!appliedPromo ? (
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input type="text" className="form-input" placeholder="Enter code" value={promoCodeInput} onChange={e => setPromoCodeInput(e.target.value.toUpperCase())} />
+                      <button className="btn btn-secondary" onClick={handleApplyPromo} disabled={promoLoading || !promoCodeInput}>Apply</button>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: 'var(--green-glow)', border: '1px solid var(--green)', borderRadius: 'var(--radius-md)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--green)', fontWeight: 600 }}>
+                        <span>✓</span> {appliedPromo.code} (-{appliedPromo.discount}%)
+                      </div>
+                      <button onClick={removePromo} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>✕</button>
+                    </div>
+                  )}
+                  {promoError && <div style={{ fontSize: '0.8rem', color: 'var(--red)', marginTop: '8px' }}>{promoError}</div>}
+                </div>
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
                     <span style={{ color: 'var(--text-muted)' }}>Platform</span>
@@ -299,9 +353,16 @@ function CheckoutContent() {
                   <div style={{ height: '1px', background: 'var(--border)', margin: '8px 0' }} />
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontWeight: 700 }}>Total</span>
-                    <span style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-                      ${totalPrice}
-                    </span>
+                    <div style={{ textAlign: 'right' }}>
+                      {appliedPromo && (
+                        <div style={{ textDecoration: 'line-through', color: 'var(--text-muted)', fontSize: '1rem', fontWeight: 600 }}>
+                          ${totalPrice.toFixed(2)}
+                        </div>
+                      )}
+                      <span style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                        ${finalPrice.toFixed(2)}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
