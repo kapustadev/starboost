@@ -84,7 +84,7 @@ export function ProfileClient({ initialProfile }: { initialProfile: any }) {
                     <div style={{fontSize:'0.8rem',color:'var(--text-muted)'}}>{n.desc}</div>
                   </div>
                   <button
-                    onClick={() => setProfile(prev => ({...prev, [n.key]: !prev[n.key]}))}
+                    onClick={() => setProfile((prev: any) => ({...prev, [n.key]: !prev[n.key]}))}
                     style={{
                       width:'44px',height:'24px',
                       borderRadius:'12px',
