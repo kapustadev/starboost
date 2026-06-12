@@ -41,7 +41,7 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error('Registration error:', error)
     return NextResponse.json(
-      { message: 'Registration failed', error: error?.message || String(error) },
+      { message: error?.message || 'Internal server error', stack: error?.stack },
       { status: 500 }
     )
   }

@@ -22,8 +22,14 @@ export default function RegisterPage() {
       })
 
       if (!res.ok) {
-        const data = await res.json()
-        setError(data.message || 'Registration failed')
+        let errorMsg = 'Registration failed'
+        try {
+          const data = await res.json()
+          errorMsg = data.message || errorMsg
+        } catch (e) {
+          errorMsg = `Server error ${res.status}: ${res.statusText}`
+        }
+        setError(errorMsg)
         setLoading(false)
         return
       }
