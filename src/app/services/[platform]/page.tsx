@@ -50,9 +50,6 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
   const [customQty, setCustomQty] = useState('')
   const [textOption, setTextOption] = useState<TextOption>('none')
   const [frequency, setFrequency] = useState('1/3days')
-  const [targetUrl, setTargetUrl] = useState('')
-  const [businessName, setBusinessName] = useState('')
-  const [notes, setNotes] = useState('')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const dropdownRef = useRef<HTMLLIElement>(null)
 
@@ -72,9 +69,6 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
-  const { data: session } = useSession()
-  const [loading, setLoading] = useState(false)
-
   if (!platform) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-primary)' }}>
@@ -91,49 +85,6 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
   const pricePerReview = getPricePerReview(platform.id, selectedCountry, textOption)
   const totalPrice = calculatePrice(platform.id, selectedCountry, effectiveQty, textOption)
   const testimonials = TESTIMONIALS[platform.id] || TESTIMONIALS.google
-
-  const handleCheckout = async () => {
-    if (!session) {
-      window.location.href = `/login?callbackUrl=/services/${platform.id}`
-      return
-    }
-
-    if (!targetUrl) {
-      alert('Please enter your Business URL')
-      return
-    }
-
-    setLoading(true)
-    try {
-      const res = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          platform: platform.id,
-          country: selectedCountry,
-          quantity: effectiveQty,
-          textOption,
-          frequency,
-          targetUrl,
-          businessName,
-          notes,
-          pricePerReview,
-          totalPrice
-        })
-      })
-
-      const data = await res.json()
-      if (res.ok && data.url) {
-        window.location.href = data.url
-      } else {
-        alert(data.message || 'Checkout failed')
-        setLoading(false)
-      }
-    } catch (err) {
-      alert('An error occurred during checkout')
-      setLoading(false)
-    }
-  }
 
   return (
     <>
@@ -366,22 +317,6 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
                   </select>
                 </div>
 
-                {/* Business URL */}
-                <div style={{ marginBottom: '16px' }}>
-                  <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Business URL *</label>
-                  <input type="url" className="form-input" placeholder={URL_PLACEHOLDER[platform.id]} value={targetUrl} onChange={e => setTargetUrl(e.target.value)} />
-                </div>
-
-                <div style={{ marginBottom: '16px' }}>
-                  <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Business Name</label>
-                  <input type="text" className="form-input" placeholder="e.g. The Coffee House" value={businessName} onChange={e => setBusinessName(e.target.value)} />
-                </div>
-
-                <div style={{ marginBottom: '20px' }}>
-                  <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Notes (optional)</label>
-                  <textarea className="form-input" placeholder="Keywords, specific instructions…" rows={2} value={notes} onChange={e => setNotes(e.target.value)} />
-                </div>
-
                 {/* Summary */}
                 <div style={{ background: 'var(--bg-primary)', borderRadius: 'var(--radius-lg)', padding: '16px', marginBottom: '20px' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -413,14 +348,13 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
                   </div>
                 </div>
 
-                <button
+                <Link
+                  href={`/checkout?platform=${platform.id}&qty=${effectiveQty}&country=${selectedCountry}&textOption=${textOption}&frequency=${encodeURIComponent(frequency)}`}
                   className="btn btn-primary btn-full btn-lg"
                   style={{ justifyContent: 'center' }}
-                  onClick={handleCheckout}
-                  disabled={loading}
                 >
-                  {loading ? 'Processing...' : 'Proceed to Payment →'}
-                </button>
+                  Continue to Checkout →
+                </Link>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '14px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>

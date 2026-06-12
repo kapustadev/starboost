@@ -61,7 +61,8 @@ model VerificationToken {
 
 model Order {
   id              String      @id @default(cuid())
-  userId          String
+  userId          String?
+  guestEmail      String?
   platform        String      // "google" | "facebook" | "trustpilot"
   country         String      // "us" | "pl" | "ua" | "gb" | "de" etc.
   quantity        Int
@@ -79,7 +80,7 @@ model Order {
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   tickets  Ticket[]
   payment  Payment?
 }
@@ -111,7 +112,7 @@ model TicketMessage {
 
 model Payment {
   id              String   @id @default(cuid())
-  userId          String
+  userId          String?
   orderId         String   @unique
   stripeSessionId String   @unique
   amount          Float
@@ -119,6 +120,6 @@ model Payment {
   status          String   @default("pending") // pending | paid | failed | refunded
   createdAt       DateTime @default(now())
 
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user  User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }

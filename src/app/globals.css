@@ -343,13 +343,11 @@ textarea.form-input { resize: vertical; min-height: 100px; }
 }
 
 .navbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   font-family: var(--font-display);
   font-size: 1.4rem;
   font-weight: 800;
   color: var(--text-primary);
+  text-decoration: none;
 }
 
 .navbar-logo span { color: var(--accent); }

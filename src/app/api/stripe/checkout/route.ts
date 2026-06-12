@@ -3,14 +3,11 @@ import { prisma } from '@/lib/prisma'
 import { stripe } from '@/lib/stripe'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import bcrypt from 'bcryptjs'
 
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: 'Unauthorized. Please log in.' }, { status: 401 })
-    }
-
     const body = await req.json()
     const {
       platform,
@@ -22,17 +19,41 @@ export async function POST(req: Request) {
       businessName,
       notes,
       pricePerReview,
-      totalPrice
+      totalPrice,
+      email,
+      createAccount,
+      password,
+      name
     } = body
 
-    if (!platform || !country || !quantity || !targetUrl || !totalPrice) {
+    if (!platform || !country || !quantity || !targetUrl || !totalPrice || (!session && !email)) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 })
+    }
+
+    let finalUserId = session?.user?.id
+    const finalEmail = session?.user?.email || email
+
+    if (!session && createAccount && password) {
+      const existingUser = await prisma.user.findUnique({ where: { email } })
+      if (existingUser) {
+        return NextResponse.json({ message: 'User already exists. Please log in.' }, { status: 400 })
+      }
+      const hashedPassword = await bcrypt.hash(password, 10)
+      const newUser = await prisma.user.create({
+        data: {
+          email,
+          name,
+          password: hashedPassword,
+        }
+      })
+      finalUserId = newUser.id
     }
 
     // Create Order in DB
     const order = await prisma.order.create({
       data: {
-        userId: session.user.id,
+        userId: finalUserId || null,
+        guestEmail: finalUserId ? null : finalEmail,
         platform,
         country,
         quantity,
@@ -51,7 +72,7 @@ export async function POST(req: Request) {
     const stripeSession = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       client_reference_id: order.id,
-      customer_email: session.user.email || undefined,
+      customer_email: finalEmail || undefined,
       line_items: [
         {
           price_data: {
@@ -66,8 +87,8 @@ export async function POST(req: Request) {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/dashboard/orders?success=true`,
-      cancel_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/services/${platform}?canceled=true`,
+      success_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}${finalUserId ? '/dashboard/orders?success=true' : '/?checkout_success=true'}`,
+      cancel_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/checkout?platform=${platform}&qty=${quantity}&country=${country}&textOption=${textOption}&frequency=${encodeURIComponent(frequency)}`,
     })
 
     if (!stripeSession.url) {
