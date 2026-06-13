@@ -31,42 +31,35 @@ export async function placeBulkOrder({ platform, country, reviewsPerLink, urls, 
   }
 
   try {
-    await prisma.$transaction(async (tx) => {
-      // Deduct balance
-      await tx.user.update({
-        where: { id: user.id },
-        data: { balance: { decrement: totalCost } }
+    // Deduct balance
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { balance: { decrement: totalCost } }
+    })
+
+    // Create orders
+    for (const url of urls) {
+      const order = await prisma.order.create({
+        data: {
+          userId: user.id,
+          platform,
+          country,
+          quantity: reviewsPerLink,
+          pricePerReview: 0, // Bulk pricing
+          totalPrice: totalCost / urls.length, // Distribute cost
+          status: 'processing',
+          targetUrl: url,
+          isBulk: true,
+        }
       })
 
-      // Generate White Label Token
-      const token = crypto.randomBytes(16).toString('hex')
-
-      // Create orders
-      for (const url of urls) {
-        const order = await tx.order.create({
-          data: {
-            userId: user.id,
-            platform,
-            country,
-            quantity: reviewsPerLink,
-            pricePerReview: 0, // Bulk pricing
-            totalPrice: totalCost / urls.length, // Distribute cost
-            status: 'processing',
-            targetUrl: url,
-            isBulk: true,
-          }
-        })
-
-        // Create white label report for this specific order
-        // (If they want one report per link)
-        await tx.whiteLabelReport.create({
-          data: {
-            orderId: order.id,
-            token: crypto.randomBytes(12).toString('hex'),
-          }
-        })
-      }
-    })
+      await prisma.whiteLabelReport.create({
+        data: {
+          orderId: order.id,
+          token: crypto.randomBytes(12).toString('hex'),
+        }
+      })
+    }
 
     return { success: true }
   } catch (error: any) {

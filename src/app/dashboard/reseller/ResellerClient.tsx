@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { PlusCircle, List, Key } from 'lucide-react'
-import { COUNTRIES } from '@/lib/data'
+import { COUNTRIES, getPricePerReview } from '@/lib/data'
 import { placeBulkOrder } from '@/app/actions/reseller'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
@@ -21,8 +21,8 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
   // Derived state
   const urlList = urls.split('\n').map(u => u.trim()).filter(u => u.length > 0)
   const totalReviews = urlList.length * reviewsPerLink
-  // Let's assume base price is from our data or fallback
-  const basePrice = platform === 'google' ? 5 : platform === 'trustpilot' ? 6 : 4
+  
+  const basePrice = getPricePerReview(platform, country, 'none')
   const subtotal = totalReviews * basePrice
   const discount = subtotal * 0.20
   const total = subtotal - discount

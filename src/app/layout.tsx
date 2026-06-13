@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>{children}</Providers>
-        <Toaster position="bottom-right" toastOptions={{ className: 'custom-toast' }} />
+        <Toaster position="top-center" toastOptions={{ className: 'custom-toast' }} />
       </body>
     </html>
   )
