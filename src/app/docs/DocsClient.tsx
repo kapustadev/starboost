@@ -11,6 +11,9 @@ const CATEGORIES = [
   { id: 'billing', label: 'Billing & Payments', icon: CreditCard },
   { id: 'affiliate', label: 'Affiliate Program', icon: UserPlus },
   { id: 'reseller', label: 'Reseller Portal', icon: ShieldAlert },
+  { id: 'platform-rules', label: 'Platform Rules', icon: BookOpen },
+  { id: 'tools', label: 'Free Tools', icon: BarChart },
+  { id: 'faq', label: 'FAQ', icon: Info },
 ]
 
 export default function DocsClient() {
@@ -258,7 +261,7 @@ export default function DocsClient() {
               Affiliate Program
             </h2>
             <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '32px' }}>
-              Turn your network into a passive income stream. Earn a massive <strong>15% commission</strong> on every single order placed by customers you refer.
+              Turn your network into a passive income stream. Earn a massive <strong>10% commission</strong> on every single order placed by customers you refer.
             </p>
 
             <div className="bento-card" style={{ marginBottom: '32px' }}>
@@ -267,14 +270,14 @@ export default function DocsClient() {
                 <li><strong>Copy Your Link:</strong> Navigate to the <strong>Affiliate</strong> tab and click the "Copy" button next to your unique <code>?ref=</code> link.</li>
                 <li><strong>Share:</strong> Post this link on your blog, YouTube channel, or email it to clients who need reputation management.</li>
                 <li><strong>Cookie Tracking:</strong> When a user clicks your link, a 30-day tracking cookie is placed on their browser. If they register an account within 30 days, they are permanently locked to your profile.</li>
-                <li><strong>Earn Forever:</strong> Every time that referred user places an order—whether it's today or two years from now—15% of the total order value is instantly credited to your Affiliate Balance.</li>
+                <li><strong>Earn Forever:</strong> Every time that referred user places an order—whether it's today or two years from now—10% of the total order value is instantly credited to your Affiliate Balance.</li>
               </ol>
             </div>
 
             <div className="bento-grid bento-grid-2">
               <div className="stat-card">
                 <div className="stat-card-label">Commission Rate</div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--green)' }}>15%</div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--green)' }}>10%</div>
                 <div className="stat-card-sub">On all referred orders</div>
               </div>
               <div className="stat-card">
@@ -309,7 +312,7 @@ export default function DocsClient() {
                 Instead of checking out one order at a time, the Reseller Portal allows you to submit up to 50 URLs in a single action.
               </p>
               <ul style={{ paddingLeft: '20px', color: 'var(--text-secondary)', lineHeight: 1.7, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <li><strong>20% Lifetime Discount:</strong> All orders processed through the bulk portal automatically receive a 20% discount off the base price.</li>
+                <li><strong>15% Lifetime Discount:</strong> All orders processed through the bulk portal automatically receive a 15% discount off the base price.</li>
                 <li><strong>Balance Deduction:</strong> Bulk orders do not require a credit card at checkout. Instead, they deduct the total cost directly from your pre-funded <em>Account Balance</em>.</li>
                 <li><strong>Auto-Splitting:</strong> If you paste 10 URLs, the system will automatically generate 10 separate sub-orders in the "Client Orders" tab so you can track them individually.</li>
               </ul>
@@ -323,6 +326,111 @@ export default function DocsClient() {
                   One of the most powerful reseller features is the White-Label Report. For every sub-order you create, the system generates a unique, unbranded tracking link. You can send this link to your client so they can monitor the delivery of their reviews in real-time, without ever knowing that you are using StarsBoost to fulfill the service.
                 </p>
               </div>
+            </div>
+          </div>
+        )}
+
+        {activeCategory === 'platform-rules' && (
+          <div className="docs-content fade-in">
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <BookOpen className="text-accent" size={32} />
+              Platform Rules
+            </h2>
+            <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '32px' }}>
+              Each review platform has its own algorithms and best practices. Follow these guidelines to ensure maximum safety and impact for your reputation campaigns.
+            </p>
+
+            <div className="bento-card" style={{ marginBottom: '32px' }}>
+              <h3 style={{ color: 'var(--blue)' }}>Google Maps Guidelines</h3>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '16px' }}>
+                Google's Local Pack algorithm is highly sensitive to geography and review velocity.
+              </p>
+              <ul style={{ paddingLeft: '20px', color: 'var(--text-secondary)', lineHeight: 1.7, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <li><strong>Geo-Targeting:</strong> Always select the country that matches your business location. Google will flag reviews coming from foreign IP addresses for a local brick-and-mortar store.</li>
+                <li><strong>Review Velocity:</strong> We strictly limit Google delivery to 1-2 reviews per day. Attempting to force faster delivery will result in Google "ghosting" (hiding) the reviews.</li>
+              </ul>
+            </div>
+
+            <div className="bento-card" style={{ marginBottom: '32px' }}>
+              <h3 style={{ color: 'var(--green)' }}>Trustpilot Guidelines</h3>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '16px' }}>
+                Trustpilot relies heavily on automated fraud detection software.
+              </p>
+              <ul style={{ paddingLeft: '20px', color: 'var(--text-secondary)', lineHeight: 1.7, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <li><strong>Custom Text:</strong> We highly recommend providing custom text for Trustpilot. Generic comments like "Good service" are often flagged by their automated filters.</li>
+                <li><strong>Domain Verification:</strong> If your Trustpilot page is unclaimed, reviews will still stick, but claiming your page adds an extra layer of legitimacy.</li>
+              </ul>
+            </div>
+
+            <div className="bento-card">
+              <h3 style={{ color: 'var(--accent)' }}>Facebook Guidelines</h3>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '16px' }}>
+                Facebook Pages no longer use star ratings natively, they use "Recommendations". Our system automatically formats the delivery as a positive recommendation to boost your page score and reduce your Ad CPM.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {activeCategory === 'tools' && (
+          <div className="docs-content fade-in">
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <BarChart className="text-accent" size={32} />
+              Free Tools
+            </h2>
+            
+            <div className="bento-card" style={{ marginBottom: '32px' }}>
+              <h3>Rating Calculator</h3>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '16px' }}>
+                Not sure how many reviews you need to buy to fix a bad rating? We provide a free mathematical tool to calculate exactly what is required.
+              </p>
+              <ol style={{ paddingLeft: '20px', color: 'var(--text-secondary)', lineHeight: 1.7, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <li>Navigate to the <Link href="/tools/rating-calculator" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Rating Calculator</Link> (accessible from the Footer).</li>
+                <li>Enter your <strong>Current Rating</strong> (e.g., 3.8).</li>
+                <li>Enter your <strong>Current Number of Reviews</strong> (e.g., 42).</li>
+                <li>Enter your <strong>Target Rating</strong> (e.g., 4.5).</li>
+                <li>The calculator will instantly tell you exactly how many 5-star reviews you need to purchase to hit your target.</li>
+              </ol>
+            </div>
+          </div>
+        )}
+
+        {activeCategory === 'faq' && (
+          <div className="docs-content fade-in">
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <Info className="text-accent" size={32} />
+              Frequently Asked Questions
+            </h2>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              
+              <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', padding: '24px', borderRadius: '12px' }}>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>Will my business account get banned?</h3>
+                <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  No. We use aged, residential accounts with clean IP addresses from your target country. Combined with our natural drip-feed delivery system, our reviews are indistinguishable from real organic customer feedback. Your account is 100% safe from algorithm penalties.
+                </p>
+              </div>
+
+              <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', padding: '24px', borderRadius: '12px' }}>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>How long does delivery take?</h3>
+                <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  To maintain safety, we drip-feed 1 to 3 reviews per day. For example, an order of 10 reviews will typically take 4 to 7 days to complete. Fast delivery (e.g., 50 reviews in one hour) is the number one cause of algorithmic bans, which is why we strictly prohibit it.
+                </p>
+              </div>
+
+              <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', padding: '24px', borderRadius: '12px' }}>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>What happens if a review is deleted?</h3>
+                <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  We offer an industry-leading <strong>30-Day Drop Guarantee</strong>. While drops are extremely rare with our premium accounts, if any review we place is removed within 30 days of the order completion, simply open a Support Ticket and we will replace it entirely free of charge.
+                </p>
+              </div>
+
+              <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', padding: '24px', borderRadius: '12px' }}>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>Can I provide my own review text?</h3>
+                <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  Absolutely! During checkout, you can select the "Custom Text" option and paste a list of exact comments you want our accounts to post. If you leave it blank, our team will write highly relevant, organic-sounding reviews tailored to your specific business niche.
+                </p>
+              </div>
+
             </div>
           </div>
         )}
