@@ -148,18 +148,26 @@ export default function DocsClient() {
 
             <div className="bento-card" style={{ marginBottom: '32px' }}>
               <h3>Understanding Order Statuses</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-                  <span className="badge badge-yellow" style={{ width: '100px', justifyContent: 'center' }}>Pending</span>
+                  <span className="badge badge-yellow" style={{ width: '110px', flexShrink: 0, display: 'flex', justifyContent: 'center' }}>Pending</span>
                   <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.5 }}>Your payment is being processed or the order is awaiting manual review by our team.</p>
                 </div>
                 <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-                  <span className="badge badge-blue" style={{ width: '100px', justifyContent: 'center' }}>Processing</span>
+                  <span className="badge badge-blue" style={{ width: '110px', flexShrink: 0, display: 'flex', justifyContent: 'center' }}>Processing</span>
                   <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.5 }}>Reviews are currently being drip-fed to your profile. You will see the progress bar update (e.g., 5/20 delivered).</p>
                 </div>
                 <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-                  <span className="badge badge-green" style={{ width: '100px', justifyContent: 'center' }}>Completed</span>
+                  <span className="badge badge-green" style={{ width: '110px', flexShrink: 0, display: 'flex', justifyContent: 'center' }}>Completed</span>
                   <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.5 }}>All reviews have been successfully posted and verified.</p>
+                </div>
+                <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                  <span className="badge badge-red" style={{ width: '110px', flexShrink: 0, display: 'flex', justifyContent: 'center', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444' }}>Cancelled</span>
+                  <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.5 }}>The order was cancelled either by you or our administration team. Any funds have been refunded.</p>
+                </div>
+                <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                  <span className="badge badge-red" style={{ width: '110px', flexShrink: 0, display: 'flex', justifyContent: 'center', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444' }}>Failed</span>
+                  <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.5 }}>There was a technical issue delivering the reviews (e.g., the provided URL is invalid). Contact support.</p>
                 </div>
               </div>
             </div>
