@@ -48,6 +48,7 @@ function CheckoutContent() {
   const [promoLoading, setPromoLoading] = useState(false)
 
   const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   const handleApplyPromo = async () => {
     if (!promoCodeInput) return
@@ -117,29 +118,46 @@ function CheckoutContent() {
   }
 
   const handleCheckout = async () => {
+    setErrors({})
+    const newErrors: Record<string, string> = {}
+
     let finalUrl = targetUrl.trim()
     if (!finalUrl) {
-      alert('Please enter your Business URL')
-      return
-    }
-
-    if (!/^https?:\/\//i.test(finalUrl)) {
-      finalUrl = 'https://' + finalUrl
-    }
-
-    try {
-      new URL(finalUrl)
-    } catch {
-      alert('Please enter a valid URL for your business (e.g. https://google.com/...)')
-      return
+      newErrors.targetUrl = 'Please enter your Business URL'
+    } else {
+      if (!/^https?:\/\//i.test(finalUrl)) {
+        finalUrl = 'https://' + finalUrl
+      }
+      try {
+        new URL(finalUrl)
+      } catch {
+        newErrors.targetUrl = 'Please enter a valid URL for your business (e.g. https://google.com/...)'
+      }
     }
 
     if (!session && !email) {
-      alert('Please enter your email address to receive order updates')
-      return
+      newErrors.email = 'Please enter your email address'
+    } else if (!session && !/^\S+@\S+\.\S+$/.test(email)) {
+      newErrors.email = 'Please enter a valid email address'
     }
-    if (!name) {
-      alert('Please enter your name')
+
+    if (!name.trim()) {
+      newErrors.name = 'Please enter your name'
+    }
+
+    if (createAccount && !password) {
+      newErrors.password = 'Please create a password'
+    }
+
+    if (emailExists && !session && !password) {
+      newErrors.password = 'Please enter your password'
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
+      
+      // Scroll to top to show errors
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
 
@@ -214,8 +232,10 @@ function CheckoutContent() {
                     className="form-input" 
                     placeholder="John Doe" 
                     value={name} 
-                    onChange={e => setName(e.target.value)} 
+                    onChange={e => { setName(e.target.value); setErrors(p => ({ ...p, name: '' })) }} 
+                    style={{ border: errors.name ? '1px solid var(--red)' : '' }}
                   />
+                  {errors.name && <div style={{ fontSize: '0.8rem', color: 'var(--red)', marginTop: '6px' }}>{errors.name}</div>}
                 </div>
 
                 <div style={{ marginBottom: '16px' }}>
@@ -225,10 +245,15 @@ function CheckoutContent() {
                     className="form-input" 
                     placeholder="you@example.com" 
                     value={email} 
-                    onChange={e => setEmail(e.target.value)} 
+                    onChange={e => { setEmail(e.target.value); setErrors(p => ({ ...p, email: '' })) }} 
                     disabled={!!session}
+                    style={{ border: errors.email ? '1px solid var(--red)' : '' }}
                   />
-                  {!session && <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '6px' }}>We'll send order updates here.</div>}
+                  {errors.email ? (
+                    <div style={{ fontSize: '0.8rem', color: 'var(--red)', marginTop: '6px' }}>{errors.email}</div>
+                  ) : !session ? (
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '6px' }}>We'll send order updates here.</div>
+                  ) : null}
                 </div>
 
                 <div style={{ marginBottom: '20px' }}>
@@ -252,8 +277,10 @@ function CheckoutContent() {
                       className="form-input" 
                       placeholder="Your password" 
                       value={password} 
-                      onChange={e => setPassword(e.target.value)} 
+                      onChange={e => { setPassword(e.target.value); setErrors(p => ({ ...p, password: '' })) }} 
+                      style={{ border: errors.password ? '1px solid var(--red)' : '' }}
                     />
+                    {errors.password && <div style={{ fontSize: '0.8rem', color: 'var(--red)', marginTop: '6px' }}>{errors.password}</div>}
                   </div>
                 )}
 
@@ -273,7 +300,15 @@ function CheckoutContent() {
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingLeft: '28px', marginTop: '16px' }}>
                         <div>
                           <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Password *</label>
-                          <input type="password" className="form-input" placeholder="Create a password" value={password} onChange={e => setPassword(e.target.value)} />
+                          <input 
+                            type="password" 
+                            className="form-input" 
+                            placeholder="Create a password" 
+                            value={password} 
+                            onChange={e => { setPassword(e.target.value); setErrors(p => ({ ...p, password: '' })) }} 
+                            style={{ border: errors.password ? '1px solid var(--red)' : '' }}
+                          />
+                          {errors.password && <div style={{ fontSize: '0.8rem', color: 'var(--red)', marginTop: '6px' }}>{errors.password}</div>}
                         </div>
                       </div>
                     )}
@@ -289,7 +324,15 @@ function CheckoutContent() {
 
                 <div style={{ marginBottom: '16px' }}>
                   <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Business URL *</label>
-                  <input type="url" className="form-input" placeholder={URL_PLACEHOLDER[platform.id] || "https://..."} value={targetUrl} onChange={e => setTargetUrl(e.target.value)} />
+                  <input 
+                    type="url" 
+                    className="form-input" 
+                    placeholder={URL_PLACEHOLDER[platform.id] || "https://..."} 
+                    value={targetUrl} 
+                    onChange={e => { setTargetUrl(e.target.value); setErrors(p => ({ ...p, targetUrl: '' })) }} 
+                    style={{ border: errors.targetUrl ? '1px solid var(--red)' : '' }}
+                  />
+                  {errors.targetUrl && <div style={{ fontSize: '0.8rem', color: 'var(--red)', marginTop: '6px' }}>{errors.targetUrl}</div>}
                 </div>
 
                 <div style={{ marginBottom: '16px' }}>

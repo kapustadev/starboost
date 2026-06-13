@@ -147,28 +147,30 @@ export default function ServicePage({ params }: { params: Promise<{ platform: st
 
               <div className="bento-card">
                 <h3 style={{ marginBottom: '20px' }}>Example Packages (US pricing)</h3>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr>
-                      {['Reviews', 'Per Review', 'No Text', 'Our Text', ''].map(h => (
-                        <th key={h} style={{ padding: '10px 0', textAlign: 'left', fontSize: '0.78rem', color: 'var(--text-muted)', borderBottom: '1px solid var(--border)' }}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {platform.packages.map(qty => (
-                      <tr key={qty}>
-                        <td style={{ padding: '12px 0', fontWeight: 600 }}>{qty} reviews</td>
-                        <td style={{ padding: '12px 0', color: 'var(--text-muted)' }}>${platform.basePrice}</td>
-                        <td style={{ padding: '12px 0', fontWeight: 700 }}>${(platform.basePrice * qty).toFixed(0)}</td>
-                        <td style={{ padding: '12px 0', fontWeight: 700, color: 'var(--yellow)' }}>${(platform.basePrice * qty + 2 * qty).toFixed(0)}</td>
-                        <td style={{ padding: '12px 0' }}>
-                          <button className="btn btn-primary btn-sm" onClick={() => { setSelectedQty(qty); setCustomQty(''); window.scrollTo({ top: document.getElementById('pricing')?.offsetTop, behavior: 'smooth' }) }}>Select</button>
-                        </td>
+                <div style={{ overflowX: 'auto', margin: '0 -20px', padding: '0 20px' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '400px' }}>
+                    <thead>
+                      <tr>
+                        {['Reviews', 'Per Review', 'No Text', 'Our Text', ''].map(h => (
+                          <th key={h} style={{ padding: '10px 0', textAlign: 'left', fontSize: '0.78rem', color: 'var(--text-muted)', borderBottom: '1px solid var(--border)', whiteSpace: 'nowrap', paddingRight: '16px' }}>{h}</th>
+                        ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {platform.packages.map(qty => (
+                        <tr key={qty}>
+                          <td style={{ padding: '12px 0', fontWeight: 600, whiteSpace: 'nowrap', paddingRight: '16px' }}>{qty} reviews</td>
+                          <td style={{ padding: '12px 0', color: 'var(--text-muted)', whiteSpace: 'nowrap', paddingRight: '16px' }}>${platform.basePrice}</td>
+                          <td style={{ padding: '12px 0', fontWeight: 700, whiteSpace: 'nowrap', paddingRight: '16px' }}>${(platform.basePrice * qty).toFixed(0)}</td>
+                          <td style={{ padding: '12px 0', fontWeight: 700, color: 'var(--yellow)', whiteSpace: 'nowrap', paddingRight: '16px' }}>${(platform.basePrice * qty + 2 * qty).toFixed(0)}</td>
+                          <td style={{ padding: '12px 0', whiteSpace: 'nowrap' }}>
+                            <button className="btn btn-primary btn-sm" onClick={() => { setSelectedQty(qty); setCustomQty(''); window.scrollTo({ top: document.getElementById('pricing')?.offsetTop, behavior: 'smooth' }) }}>Select</button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
 
