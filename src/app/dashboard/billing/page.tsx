@@ -78,6 +78,7 @@ export default async function BillingPage() {
                 <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Date</th>
                 <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Amount</th>
                 <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Status</th>
+                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Invoice</th>
               </tr>
             </thead>
             <tbody>
@@ -88,6 +89,15 @@ export default async function BillingPage() {
                   <td style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>{new Date(p.createdAt).toLocaleDateString()}</td>
                   <td style={{ padding: '16px 24px' }}><strong>${p.amount.toFixed(2)}</strong></td>
                   <td style={{ padding: '16px 24px' }}><span className={`badge ${STATUS_STYLES[p.status]}`}>{p.status}</span></td>
+                  <td style={{ padding: '16px 24px' }}>
+                    {p.invoicePdfUrl ? (
+                      <a href={p.invoicePdfUrl} target="_blank" rel="noreferrer" className="btn btn-ghost" style={{ padding: '4px 8px', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <Receipt size={14} /> PDF
+                      </a>
+                    ) : (
+                      <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>N/A</span>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>

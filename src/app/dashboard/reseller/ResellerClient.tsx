@@ -1,24 +1,54 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { PlusCircle, List, Key } from 'lucide-react'
+import { COUNTRIES } from '@/lib/data'
+import { placeBulkOrder } from '@/app/actions/reseller'
+import { toast } from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 export default function ResellerClient({ user, orders }: { user: any, orders: any[] }) {
   const [activeTab, setActiveTab] = useState('new')
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   
   // Bulk order state
   const [platform, setPlatform] = useState('google')
+  const [country, setCountry] = useState('us')
   const [reviewsPerLink, setReviewsPerLink] = useState(10)
   const [urls, setUrls] = useState('')
 
   // Derived state
   const urlList = urls.split('\n').map(u => u.trim()).filter(u => u.length > 0)
   const totalReviews = urlList.length * reviewsPerLink
-  // Let's assume base price is $5 for Google
+  // Let's assume base price is from our data or fallback
   const basePrice = platform === 'google' ? 5 : platform === 'trustpilot' ? 6 : 4
   const subtotal = totalReviews * basePrice
   const discount = subtotal * 0.20
   const total = subtotal - discount
+
+  const handleCheckout = () => {
+    if (urlList.length === 0) return
+    
+    startTransition(async () => {
+      const res = await placeBulkOrder({
+        platform,
+        country,
+        reviewsPerLink,
+        urls: urlList,
+        totalCost: total
+      })
+
+      if (res.error) {
+        toast.error(res.error)
+      } else {
+        toast.success(`Successfully created ${urlList.length} orders!`)
+        setUrls('')
+        setActiveTab('orders')
+        router.refresh()
+      }
+    })
+  }
 
   return (
     <div>
@@ -81,6 +111,15 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
             </div>
 
             <div className="form-group">
+              <label className="form-label">Country</label>
+              <select className="form-input" value={country} onChange={e => setCountry(e.target.value)}>
+                {COUNTRIES.map(c => (
+                  <option key={c.code} value={c.code}>{c.flag} {c.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
               <label className="form-label">Reviews per Link</label>
               <input type="number" className="form-input" value={reviewsPerLink} onChange={e => setReviewsPerLink(parseInt(e.target.value) || 0)} min={1} />
             </div>
@@ -118,8 +157,14 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
               </div>
             </div>
 
-            <button type="button" className="btn btn-primary btn-lg" style={{ marginTop: '10px' }} disabled={urlList.length === 0} onClick={() => alert('Bulk checkout not fully implemented in UI demo.')}>
-              Proceed to Bulk Checkout
+            <button 
+              type="button" 
+              className="btn btn-primary btn-lg" 
+              style={{ marginTop: '10px' }} 
+              disabled={urlList.length === 0 || isPending} 
+              onClick={handleCheckout}
+            >
+              {isPending ? 'Processing...' : 'Proceed to Bulk Checkout'}
             </button>
           </form>
         </div>

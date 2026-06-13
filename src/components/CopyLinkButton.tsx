@@ -1,4 +1,5 @@
 'use client'
+import { toast } from 'react-hot-toast'
 
 export default function CopyLinkButton({ link }: { link: string }) {
   return (
@@ -6,7 +7,7 @@ export default function CopyLinkButton({ link }: { link: string }) {
       className="btn btn-primary" 
       onClick={() => {
         navigator.clipboard.writeText(link)
-        alert('Copied to clipboard!')
+        toast.success('Copied to clipboard!')
       }}
     >
       Copy Link

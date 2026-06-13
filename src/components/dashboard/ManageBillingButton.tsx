@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 export function ManageBillingButton() {
   const [loading, setLoading] = useState(false)
@@ -15,11 +16,11 @@ export function ManageBillingButton() {
       if (data.url) {
         window.location.href = data.url
       } else {
-        alert(data.message || 'Failed to open billing portal')
+        toast.error(data.message || 'Failed to open billing portal')
       }
     } catch (error) {
       console.error(error)
-      alert('An error occurred')
+      toast.error('An error occurred')
     } finally {
       setLoading(false)
     }

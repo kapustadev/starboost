@@ -8,6 +8,7 @@ import { signIn, useSession } from 'next-auth/react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { Lock } from 'lucide-react'
+import { toast } from 'react-hot-toast'
 
 const URL_PLACEHOLDER: Record<string, string> = {
   google: 'https://maps.google.com/?cid=123456 or your Google Maps link',
@@ -166,7 +167,7 @@ function CheckoutContent() {
     if (emailExists && !session && password) {
       const res = await signIn('credentials', { redirect: false, email, password })
       if (res?.error) {
-        alert(res.error)
+        toast.error(res.error)
         setLoading(false)
         return
       }
@@ -201,11 +202,11 @@ function CheckoutContent() {
       if (res.ok && data.url) {
         window.location.href = data.url
       } else {
-        alert(data.message || 'Checkout failed')
+        toast.error(data.message || 'Checkout failed')
         setLoading(false)
       }
     } catch (err) {
-      alert('An error occurred during checkout')
+      toast.error('An error occurred during checkout')
       setLoading(false)
     }
   }

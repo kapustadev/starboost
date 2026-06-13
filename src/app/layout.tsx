@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 }
 
 import Providers from './providers'
+import { Toaster } from 'react-hot-toast'
 
 export default function RootLayout({
   children,
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>{children}</Providers>
+        <Toaster position="bottom-right" toastOptions={{ className: 'custom-toast' }} />
       </body>
     </html>
   )

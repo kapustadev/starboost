@@ -146,6 +146,7 @@ model Payment {
   amount          Float
   currency        String   @default("USD")
   status          String   @default("pending") // pending | paid | failed | refunded
+  invoicePdfUrl   String?
   createdAt       DateTime @default(now())
 
   user  User? @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -36,6 +36,17 @@ export async function POST(req: Request) {
         },
       })
 
+      // Fetch invoice PDF if exists
+      let invoicePdfUrl = null
+      if (session.invoice) {
+        try {
+          const invoice = await stripe.invoices.retrieve(session.invoice as string)
+          invoicePdfUrl = invoice.invoice_pdf || invoice.hosted_invoice_url
+        } catch (e) {
+          console.error('Failed to retrieve invoice', e)
+        }
+      }
+
       // Create Payment record
       const order = await prisma.order.findUnique({ 
         where: { id: orderId },
@@ -48,7 +59,8 @@ export async function POST(req: Request) {
             orderId: order.id,
             stripeSessionId: session.id,
             amount: session.amount_total / 100,
-            status: 'paid'
+            status: 'paid',
+            invoicePdfUrl
           }
         })
 

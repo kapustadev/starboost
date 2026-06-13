@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { sendChatMessage } from './actions'
+import { toast } from 'react-hot-toast'
 
 const STATUS_STYLES: Record<string, string> = {
   open: 'badge-yellow',
@@ -40,8 +41,8 @@ export function OrderChatClient({ ticket, orderId }: { ticket: any, orderId: str
     setReplyText('')
 
     const res = await sendChatMessage(ticket.id, contentToSend)
-    if (res.error) {
-      alert(res.error)
+    if (res?.error) {
+      toast.error(res.error)
       // Revert optimistic update
       setLocalMessages(prev => prev.filter(m => m.id !== optimisticMsg.id))
     }

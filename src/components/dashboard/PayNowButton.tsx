@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 export function PayNowButton({ orderId }: { orderId: string }) {
   const [loading, setLoading] = useState(false)
@@ -17,12 +18,12 @@ export function PayNowButton({ orderId }: { orderId: string }) {
       if (data.url) {
         window.location.href = data.url
       } else {
-        alert(data.message || 'Failed to initialize checkout')
+        toast.error(data.message || 'Failed to initialize checkout')
         setLoading(false)
       }
     } catch (error) {
       console.error(error)
-      alert('An error occurred')
+      toast.error('An error occurred')
       setLoading(false)
     }
   }

@@ -106,6 +106,7 @@ export async function POST(req: Request) {
         },
       ],
       mode: 'payment',
+      invoice_creation: { enabled: true },
       success_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}${finalUserId ? '/dashboard/orders?success=true' : '/?checkout_success=true'}`,
       cancel_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/checkout?platform=${platform}&qty=${quantity}&country=${country}&textOption=${textOption}&frequency=${encodeURIComponent(frequency)}`,
     })

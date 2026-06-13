@@ -47,6 +47,7 @@ export async function POST(req: Request) {
         },
       ],
       mode: 'payment',
+      invoice_creation: { enabled: true },
       success_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/dashboard/orders?success=true`,
       cancel_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/dashboard`,
     })
