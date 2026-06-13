@@ -137,35 +137,37 @@ export default function Navbar() {
             <li><Link href="/#faq">FAQ</Link></li>
           </ul>
 
-          <div className="navbar-actions desktop-only">
-            {status === 'loading' ? (
-              <div style={{ width: '180px' }}></div>
-            ) : session ? (
-              <Link href="/dashboard" className="btn btn-primary btn-sm">Go to Dashboard</Link>
-            ) : (
-              <>
-                <Link href="/login" className="btn btn-ghost btn-sm">Sign In</Link>
-                <Link href="/register" className="btn btn-primary btn-sm">Get Started</Link>
-              </>
-            )}
-          </div>
-
-          <button className="mobile-menu-btn" onClick={() => setMobileOpen(!mobileOpen)}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              {mobileOpen ? (
-                <>
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div className="navbar-actions">
+              {status === 'loading' ? (
+                <div style={{ width: '180px' }}></div>
+              ) : session ? (
+                <Link href="/dashboard" className="btn btn-primary btn-sm mobile-hidden">Go to Dashboard</Link>
               ) : (
                 <>
-                  <line x1="3" y1="12" x2="21" y2="12"></line>
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                  <Link href="/login" className="btn btn-ghost btn-sm">Sign In</Link>
+                  <Link href="/register" className="btn btn-primary btn-sm mobile-hidden">Get Started</Link>
                 </>
               )}
-            </svg>
-          </button>
+            </div>
+
+            <button className="mobile-menu-btn" onClick={() => setMobileOpen(!mobileOpen)}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                {mobileOpen ? (
+                  <>
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </>
+                ) : (
+                  <>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                  </>
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
