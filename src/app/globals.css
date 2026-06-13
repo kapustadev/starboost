@@ -1415,6 +1415,10 @@ table tr:hover td { background: rgba(255,255,255,0.02); }
     flex: 1;
   }
 
+  .auth-skeleton {
+    width: 70px !important;
+  }
+
   .hero-stats { flex-wrap: wrap; gap: 20px; }
   .section { padding: 64px 0; }
   

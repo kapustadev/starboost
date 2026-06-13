@@ -141,7 +141,7 @@ export default function Navbar() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div className="navbar-actions">
               {status === 'loading' ? (
-                <div style={{ width: '180px' }}></div>
+                <div className="auth-skeleton" style={{ width: '180px', height: '36px' }}></div>
               ) : session ? (
                 <Link href="/dashboard" className="btn btn-primary btn-sm mobile-hidden">Go to Dashboard</Link>
               ) : (
