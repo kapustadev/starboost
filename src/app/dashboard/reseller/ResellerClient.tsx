@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { PlusCircle, List, Key } from 'lucide-react'
+import { PlusCircle, List, Key, MessageCircle } from 'lucide-react'
 import { COUNTRIES, getPricePerReview } from '@/lib/data'
 import { placeBulkOrder } from '@/app/actions/reseller'
 import { toast } from 'react-hot-toast'
@@ -78,16 +78,16 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', background: 'var(--bg-secondary)', padding: '6px', borderRadius: '12px', width: 'fit-content' }}>
         <button 
           onClick={() => setActiveTab('new')}
-          style={{ background: 'none', border: 'none', color: activeTab === 'new' ? 'var(--accent)' : 'var(--text-secondary)', fontSize: '1rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+          style={{ background: activeTab === 'new' ? 'var(--bg-primary)' : 'transparent', border: 'none', color: activeTab === 'new' ? 'var(--text-primary)' : 'var(--text-secondary)', fontSize: '1rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '8px', boxShadow: activeTab === 'new' ? '0 2px 8px rgba(0,0,0,0.05)' : 'none', transition: 'all 0.2s ease' }}
         >
           <PlusCircle size={18} /> New Bulk Order
         </button>
         <button 
           onClick={() => setActiveTab('orders')}
-          style={{ background: 'none', border: 'none', color: activeTab === 'orders' ? 'var(--accent)' : 'var(--text-secondary)', fontSize: '1rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+          style={{ background: activeTab === 'orders' ? 'var(--bg-primary)' : 'transparent', border: 'none', color: activeTab === 'orders' ? 'var(--text-primary)' : 'var(--text-secondary)', fontSize: '1rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '8px', boxShadow: activeTab === 'orders' ? '0 2px 8px rgba(0,0,0,0.05)' : 'none', transition: 'all 0.2s ease' }}
         >
           <List size={18} /> Client Orders
         </button>
@@ -185,6 +185,7 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
                     <th>Platform</th>
                     <th>Progress</th>
                     <th>White-Label Link</th>
+                    <th>Support</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -206,6 +207,11 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
                         ) : (
                           <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Not generated</span>
                         )}
+                      </td>
+                      <td>
+                        <a href={`/dashboard/orders/${order.id}/chat`} className="btn btn-ghost" style={{ padding: '4px 8px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <MessageCircle size={14} /> Chat
+                        </a>
                       </td>
                     </tr>
                   ))}
