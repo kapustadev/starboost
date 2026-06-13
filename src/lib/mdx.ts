@@ -10,6 +10,7 @@ export type BlogPost = {
   description: string
   date: string
   content: string
+  tags?: string[]
 }
 
 export function getBlogPosts(): BlogPost[] {
@@ -41,6 +42,7 @@ export function getBlogPost(slug: string): BlogPost | null {
       title: data.title,
       description: data.description,
       date: data.date,
+      tags: data.tags || [],
       content,
     }
   } catch (error) {

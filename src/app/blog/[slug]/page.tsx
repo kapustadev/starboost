@@ -88,8 +88,21 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
 
           <div style={{ marginBottom: '40px' }}>
-            <div style={{ fontSize: '0.9rem', color: 'var(--accent)', fontWeight: 600, marginBottom: '16px' }}>
-              {format(new Date(post.date), 'MMMM d, yyyy')}
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '16px' }}>
+              <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                {format(new Date(post.date), 'MMMM d, yyyy')}
+              </div>
+              {post.tags && post.tags.length > 0 && (
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  {post.tags.map(tag => (
+                    <Link key={tag} href={`/blog?tag=${encodeURIComponent(tag)}`}>
+                      <span className="badge badge-accent" style={{ fontSize: '0.8rem', padding: '4px 10px', cursor: 'pointer' }}>
+                        {tag}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
             <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginBottom: '24px' }}>{post.title}</h1>
             <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
