@@ -37,7 +37,10 @@ export async function POST(req: Request) {
       })
 
       // Create Payment record
-      const order = await prisma.order.findUnique({ where: { id: orderId } })
+      const order = await prisma.order.findUnique({ 
+        where: { id: orderId },
+        include: { user: true }
+      })
       if (order) {
         await prisma.payment.create({
           data: {
@@ -47,6 +50,18 @@ export async function POST(req: Request) {
             amount: session.amount_total / 100,
             status: 'paid'
           }
+        })
+
+        // Send Telegram notification
+        import('@/lib/telegram').then(({ sendTelegramMessage }) => {
+          sendTelegramMessage(
+            `💰 <b>New Order Paid! (StarsBoost)</b>\n` +
+            `🛒 <b>Service:</b> ${order.platform}\n` +
+            `📦 <b>Quantity:</b> ${order.quantity}\n` +
+            `🔗 <b>Target URL:</b> ${order.targetUrl}\n` +
+            `💵 <b>Amount:</b> $${(session.amount_total / 100).toFixed(2)}\n` +
+            `✉️ <b>User:</b> ${order.user.email}`
+          )
         })
       }
     }

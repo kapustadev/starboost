@@ -34,6 +34,15 @@ export async function POST(req: Request) {
       },
     })
 
+    // Send Telegram notification
+    import('@/lib/telegram').then(({ sendTelegramMessage }) => {
+      sendTelegramMessage(
+        `🎉 <b>New User Registered (StarsBoost)</b>\n` +
+        `👤 <b>Name:</b> ${user.name || 'No name provided'}\n` +
+        `✉️ <b>Email:</b> ${user.email}`
+      )
+    })
+
     return NextResponse.json(
       { user: { id: user.id, name: user.name, email: user.email } },
       { status: 201 }
