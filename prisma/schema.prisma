@@ -99,6 +99,18 @@ model Order {
   tickets   Ticket[]
   payment   Payment?
   promoCode PromoCode?  @relation(fields: [promoCodeId], references: [id])
+  whiteLabelReport WhiteLabelReport?
+}
+
+model WhiteLabelReport {
+  id        String   @id @default(cuid())
+  orderId   String   @unique
+  token     String   @unique
+  isPublic  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 model Ticket {
