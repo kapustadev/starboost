@@ -30,6 +30,9 @@ export default async function OrdersPage() {
           <h3 style={{ fontSize: '1.1rem' }}>All Orders ({orders.length})</h3>
         </div>
         {orders.length > 0 ? (
+          <>
+          {/* Desktop Table */}
+          <div className="desktop-only">
           <table className="table" style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left' }}>
@@ -39,6 +42,7 @@ export default async function OrdersPage() {
                 <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Progress</th>
                 <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Status</th>
                 <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total</th>
+                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -71,10 +75,64 @@ export default async function OrdersPage() {
                   <td style={{ padding: '16px 24px', fontWeight: 600 }}>
                     ${order.totalPrice.toFixed(2)}
                   </td>
+                  <td style={{ padding: '16px 24px' }}>
+                    {order.status !== 'pending' && (
+                      <Link href={`/dashboard/orders/${order.id}/chat`} className="btn btn-secondary btn-sm" style={{ padding: '6px 12px' }}>
+                        💬 Chat
+                      </Link>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="mobile-only" style={{ flexDirection: 'column' }}>
+            {orders.map(order => (
+              <div key={order.id} className="order-mobile-card">
+                <div className="order-mobile-card-row">
+                  <span className="order-mobile-card-label">Date</span>
+                  <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div className="order-mobile-card-row">
+                  <span className="order-mobile-card-label">Platform</span>
+                  <span style={{ fontWeight: 500, textTransform: 'capitalize' }}>
+                    {order.platform} <span style={{ textTransform: 'uppercase', color: 'var(--text-muted)', fontSize: '0.8rem' }}>({order.country})</span>
+                  </span>
+                </div>
+                <div className="order-mobile-card-row">
+                  <span className="order-mobile-card-label">Target URL</span>
+                  <a href={order.targetUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline', maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    Link
+                  </a>
+                </div>
+                <div className="order-mobile-card-row">
+                  <span className="order-mobile-card-label">Progress</span>
+                  <span>{order.deliveredCount} / {order.quantity}</span>
+                </div>
+                <div className="order-mobile-card-row">
+                  <span className="order-mobile-card-label">Status</span>
+                  <span className={`badge badge-${order.status === 'completed' ? 'green' : order.status === 'processing' ? 'blue' : order.status === 'cancelled' ? 'red' : 'yellow'}`}>
+                    {order.status}
+                  </span>
+                </div>
+                <div className="order-mobile-card-row">
+                  <span className="order-mobile-card-label">Total</span>
+                  <span style={{ fontWeight: 600 }}>${order.totalPrice.toFixed(2)}</span>
+                </div>
+                {order.status !== 'pending' && (
+                  <div style={{ marginTop: '8px' }}>
+                    <Link href={`/dashboard/orders/${order.id}/chat`} className="btn btn-secondary btn-full">
+                      💬 Order Chat
+                    </Link>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          </>
         ) : (
           <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             No orders found. <Link href="/services/google" style={{ color: 'var(--accent)' }}>Create your first order</Link>.

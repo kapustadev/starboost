@@ -88,40 +88,75 @@ export default async function DashboardPage() {
           <Link href="/dashboard/orders" className="btn btn-ghost btn-sm">View All →</Link>
         </div>
         {recentOrders.length > 0 ? (
-          <table className="table" style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left' }}>
-                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Platform</th>
-                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Country</th>
-                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Quantity</th>
-                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Status</th>
-                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total</th>
-              </tr>
-            </thead>
-            <tbody>
+          <>
+            {/* Desktop Table */}
+            <div className="desktop-only">
+              <table className="table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left' }}>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Platform</th>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Country</th>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Quantity</th>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Status</th>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentOrders.map(order => (
+                    <tr key={order.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                      <td style={{ padding: '16px 24px', fontWeight: 500, textTransform: 'capitalize' }}>
+                        {order.platform}
+                      </td>
+                      <td style={{ padding: '16px 24px', textTransform: 'uppercase' }}>
+                        {order.country}
+                      </td>
+                      <td style={{ padding: '16px 24px' }}>
+                        {order.deliveredCount} / {order.quantity}
+                      </td>
+                      <td style={{ padding: '16px 24px' }}>
+                        <span className={`badge badge-${order.status === 'completed' ? 'green' : order.status === 'processing' ? 'blue' : order.status === 'cancelled' ? 'red' : 'yellow'}`}>
+                          {order.status}
+                        </span>
+                      </td>
+                      <td style={{ padding: '16px 24px', fontWeight: 600 }}>
+                        ${order.totalPrice.toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="mobile-only" style={{ flexDirection: 'column' }}>
               {recentOrders.map(order => (
-                <tr key={order.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                  <td style={{ padding: '16px 24px', fontWeight: 500, textTransform: 'capitalize' }}>
-                    {order.platform}
-                  </td>
-                  <td style={{ padding: '16px 24px', textTransform: 'uppercase' }}>
-                    {order.country}
-                  </td>
-                  <td style={{ padding: '16px 24px' }}>
-                    {order.deliveredCount} / {order.quantity}
-                  </td>
-                  <td style={{ padding: '16px 24px' }}>
+                <div key={order.id} className="order-mobile-card">
+                  <div className="order-mobile-card-row">
+                    <span className="order-mobile-card-label">Platform</span>
+                    <span style={{ fontWeight: 500, textTransform: 'capitalize' }}>{order.platform}</span>
+                  </div>
+                  <div className="order-mobile-card-row">
+                    <span className="order-mobile-card-label">Country</span>
+                    <span style={{ textTransform: 'uppercase' }}>{order.country}</span>
+                  </div>
+                  <div className="order-mobile-card-row">
+                    <span className="order-mobile-card-label">Quantity</span>
+                    <span>{order.deliveredCount} / {order.quantity}</span>
+                  </div>
+                  <div className="order-mobile-card-row">
+                    <span className="order-mobile-card-label">Status</span>
                     <span className={`badge badge-${order.status === 'completed' ? 'green' : order.status === 'processing' ? 'blue' : order.status === 'cancelled' ? 'red' : 'yellow'}`}>
                       {order.status}
                     </span>
-                  </td>
-                  <td style={{ padding: '16px 24px', fontWeight: 600 }}>
-                    ${order.totalPrice.toFixed(2)}
-                  </td>
-                </tr>
+                  </div>
+                  <div className="order-mobile-card-row">
+                    <span className="order-mobile-card-label">Total</span>
+                    <span style={{ fontWeight: 600 }}>${order.totalPrice.toFixed(2)}</span>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </>
         ) : (
           <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             No orders found. <Link href="/dashboard/order/google" style={{ color: 'var(--accent)' }}>Create your first order</Link>.

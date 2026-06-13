@@ -52,6 +52,25 @@ export async function POST(req: Request) {
           }
         })
 
+        // Create Chat Ticket for this order
+        const ticket = await prisma.ticket.create({
+          data: {
+            userId: order.userId!,
+            orderId: order.id,
+            subject: `Order #${order.id.slice(-8)} Chat`,
+            status: 'open',
+            priority: 'normal',
+          }
+        })
+        
+        await prisma.ticketMessage.create({
+          data: {
+            ticketId: ticket.id,
+            content: `System: Order paid successfully. A support agent will review your order shortly.`,
+            isStaff: true
+          }
+        })
+
         // Send Telegram notification
         import('@/lib/telegram').then(({ sendTelegramMessage }) => {
           sendTelegramMessage(

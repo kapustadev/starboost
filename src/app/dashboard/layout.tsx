@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
-import { LayoutDashboard, ShoppingBag, Ticket, CreditCard, User, ArrowLeft, LogOut } from 'lucide-react'
+import { LayoutDashboard, ShoppingBag, Ticket, CreditCard, User, ArrowLeft, LogOut, Menu, X } from 'lucide-react'
 import Image from 'next/image'
 import { PLATFORMS } from '@/lib/data'
 
@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           Stars<span style={{ color: 'var(--accent)' }}>Boost</span>
         </Link>
         <button onClick={() => setMobileOpen(!mobileOpen)} style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', cursor: 'pointer' }}>
-          {mobileOpen ? <LogOut size={24} style={{ transform: 'rotate(45deg)' }} /> : <LayoutDashboard size={24} />}
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
