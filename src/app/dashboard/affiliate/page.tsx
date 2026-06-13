@@ -139,12 +139,12 @@ export default async function AffiliateDashboard() {
                 return (
                   <div key={refUser.id} className="order-mobile-card">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--accent)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--accent)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.2rem', flexShrink: 0 }}>
                         {(refUser.email || '?').charAt(0).toUpperCase()}
                       </div>
-                      <div>
-                        <div style={{ fontWeight: 500 }}>{refUser.name || 'Anonymous User'}</div>
-                        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{refUser.email}</div>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{refUser.name || 'Anonymous User'}</div>
+                        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{refUser.email}</div>
                       </div>
                     </div>
                     <div className="order-mobile-card-row">
