@@ -7,7 +7,7 @@ import { LayoutDashboard, ShoppingBag, Ticket, CreditCard, User, ArrowLeft, LogO
 import Image from 'next/image'
 import { PLATFORMS } from '@/lib/data'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import NotificationBell from '@/components/dashboard/NotificationBell'
 
 const NAV = [
@@ -24,6 +24,11 @@ const NAV = [
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    document.querySelector('.dashboard-main')?.scrollTo(0, 0)
+  }, [pathname])
 
   return (
     <div className="dashboard-layout">

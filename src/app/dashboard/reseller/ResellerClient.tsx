@@ -173,50 +173,90 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
       {activeTab === 'orders' && (
         <div className="bento-card">
           <h3>Client Orders</h3>
-          {orders.length === 0 ? (
-            <p style={{ color: 'var(--text-secondary)', marginTop: '12px' }}>You have no bulk orders yet.</p>
-          ) : (
-            <div style={{ marginTop: '20px', overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
-                <thead>
-                  <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
-                    <th style={{ padding: '12px 0' }}>URL</th>
-                    <th>Status</th>
-                    <th>Platform</th>
-                    <th>Progress</th>
-                    <th>White-Label Link</th>
-                    <th>Support</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order: any) => (
-                    <tr key={order.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                      <td style={{ padding: '16px 0', maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        <a href={order.targetUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
-                          {order.targetUrl}
-                        </a>
-                      </td>
-                      <td><span className={`badge badge-${order.status === 'completed' ? 'green' : 'blue'}`}>{order.status}</span></td>
-                      <td style={{ textTransform: 'capitalize' }}>{order.platform}</td>
-                      <td>{order.deliveredCount} / {order.quantity}</td>
-                      <td>
-                        {order.whiteLabelReport ? (
-                          <a href={`/report/${order.whiteLabelReport.token}`} target="_blank" rel="noreferrer" className="btn btn-ghost" style={{ padding: '4px 8px', fontSize: '0.85rem' }}>
-                            View Report
-                          </a>
-                        ) : (
-                          <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Not generated</span>
-                        )}
-                      </td>
-                      <td>
-                        <a href={`/dashboard/orders/${order.id}/chat`} className="btn btn-ghost" style={{ padding: '4px 8px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <MessageCircle size={14} /> Chat
-                        </a>
-                      </td>
+            <div style={{ marginTop: '20px' }}>
+              <div className="desktop-only" style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
+                      <th style={{ padding: '12px 0' }}>URL</th>
+                      <th>Status</th>
+                      <th>Platform</th>
+                      <th>Progress</th>
+                      <th>White-Label Link</th>
+                      <th>Support</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {orders.map((order: any) => (
+                      <tr key={order.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                        <td style={{ padding: '16px 0', maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <a href={order.targetUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+                            {order.targetUrl}
+                          </a>
+                        </td>
+                        <td><span className={`badge badge-${order.status === 'completed' ? 'green' : 'blue'}`}>{order.status}</span></td>
+                        <td style={{ textTransform: 'capitalize' }}>{order.platform}</td>
+                        <td>{order.deliveredCount} / {order.quantity}</td>
+                        <td>
+                          {order.whiteLabelReport ? (
+                            <a href={`/report/${order.whiteLabelReport.token}`} target="_blank" rel="noreferrer" className="btn btn-ghost" style={{ padding: '4px 8px', fontSize: '0.85rem' }}>
+                              View Report
+                            </a>
+                          ) : (
+                            <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Not generated</span>
+                          )}
+                        </td>
+                        <td>
+                          <a href={`/dashboard/orders/${order.id}/chat`} className="btn btn-ghost" style={{ padding: '4px 8px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <MessageCircle size={14} /> Chat
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Cards */}
+              <div className="mobile-only" style={{ flexDirection: 'column' }}>
+                {orders.map((order: any) => (
+                  <div key={order.id} className="order-mobile-card">
+                    <div className="order-mobile-card-row">
+                      <span className="order-mobile-card-label">URL</span>
+                      <a href={order.targetUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {order.targetUrl}
+                      </a>
+                    </div>
+                    <div className="order-mobile-card-row">
+                      <span className="order-mobile-card-label">Status</span>
+                      <span className={`badge badge-${order.status === 'completed' ? 'green' : 'blue'}`}>{order.status}</span>
+                    </div>
+                    <div className="order-mobile-card-row">
+                      <span className="order-mobile-card-label">Platform</span>
+                      <span style={{ textTransform: 'capitalize' }}>{order.platform}</span>
+                    </div>
+                    <div className="order-mobile-card-row">
+                      <span className="order-mobile-card-label">Progress</span>
+                      <span>{order.deliveredCount} / {order.quantity}</span>
+                    </div>
+                    <div className="order-mobile-card-row">
+                      <span className="order-mobile-card-label">White-Label Link</span>
+                      {order.whiteLabelReport ? (
+                        <a href={`/report/${order.whiteLabelReport.token}`} target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>
+                          View Report
+                        </a>
+                      ) : (
+                        <span style={{ color: 'var(--text-muted)' }}>Not generated</span>
+                      )}
+                    </div>
+                    <div style={{ marginTop: '8px' }}>
+                      <a href={`/dashboard/orders/${order.id}/chat`} className="btn btn-secondary btn-full" style={{ justifyContent: 'center' }}>
+                        💬 Chat
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

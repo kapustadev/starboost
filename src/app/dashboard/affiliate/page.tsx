@@ -89,42 +89,80 @@ export default async function AffiliateDashboard() {
         {user.referrals.length === 0 ? (
           <p style={{ color: 'var(--text-secondary)', marginTop: '12px' }}>You haven't referred anyone yet.</p>
         ) : (
-          <div style={{ marginTop: '20px', overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
-                  <th style={{ padding: '12px 0' }}>User</th>
-                  <th>Joined Date</th>
-                  <th>Total Spent</th>
-                  <th>Earned Commission (10%)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {user.referrals.map((refUser) => {
-                  const totalSpent = refUser.orders.reduce((acc, order) => {
-                    return acc + (order.payment?.status === 'paid' ? order.payment.amount : 0)
-                  }, 0)
-                  const commission = totalSpent * 0.10
+          <div style={{ marginTop: '20px' }}>
+            <div className="desktop-only" style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
+                    <th style={{ padding: '12px 0' }}>User</th>
+                    <th>Joined Date</th>
+                    <th>Total Spent</th>
+                    <th>Earned Commission (10%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {user.referrals.map((refUser) => {
+                    const totalSpent = refUser.orders.reduce((acc, order) => {
+                      return acc + (order.payment?.status === 'paid' ? order.payment.amount : 0)
+                    }, 0)
+                    const commission = totalSpent * 0.10
 
-                  return (
-                    <tr key={refUser.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                      <td style={{ padding: '16px 0', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--accent)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-                          {(refUser.email || '?').charAt(0).toUpperCase()}
-                        </div>
-                        <div>
-                          <div style={{ fontWeight: 500 }}>{refUser.name || 'Anonymous User'}</div>
-                          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{refUser.email}</div>
-                        </div>
-                      </td>
-                      <td style={{ color: 'var(--text-secondary)' }}>{new Date(refUser.createdAt).toLocaleDateString()}</td>
-                      <td style={{ fontWeight: 500 }}>${totalSpent.toFixed(2)}</td>
-                      <td style={{ color: 'var(--green)', fontWeight: 600 }}>${commission.toFixed(2)}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+                    return (
+                      <tr key={refUser.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                        <td style={{ padding: '16px 0', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--accent)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                            {(refUser.email || '?').charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <div style={{ fontWeight: 500 }}>{refUser.name || 'Anonymous User'}</div>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{refUser.email}</div>
+                          </div>
+                        </td>
+                        <td style={{ color: 'var(--text-secondary)' }}>{new Date(refUser.createdAt).toLocaleDateString()}</td>
+                        <td style={{ fontWeight: 500 }}>${totalSpent.toFixed(2)}</td>
+                        <td style={{ color: 'var(--green)', fontWeight: 600 }}>${commission.toFixed(2)}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="mobile-only" style={{ flexDirection: 'column' }}>
+              {user.referrals.map((refUser) => {
+                const totalSpent = refUser.orders.reduce((acc, order) => {
+                  return acc + (order.payment?.status === 'paid' ? order.payment.amount : 0)
+                }, 0)
+                const commission = totalSpent * 0.10
+
+                return (
+                  <div key={refUser.id} className="order-mobile-card">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--accent)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                        {(refUser.email || '?').charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 500 }}>{refUser.name || 'Anonymous User'}</div>
+                        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{refUser.email}</div>
+                      </div>
+                    </div>
+                    <div className="order-mobile-card-row">
+                      <span className="order-mobile-card-label">Joined Date</span>
+                      <span>{new Date(refUser.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <div className="order-mobile-card-row">
+                      <span className="order-mobile-card-label">Total Spent</span>
+                      <span style={{ fontWeight: 500 }}>${totalSpent.toFixed(2)}</span>
+                    </div>
+                    <div className="order-mobile-card-row">
+                      <span className="order-mobile-card-label">Commission (10%)</span>
+                      <span style={{ color: 'var(--green)', fontWeight: 600 }}>${commission.toFixed(2)}</span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )}
       </div>

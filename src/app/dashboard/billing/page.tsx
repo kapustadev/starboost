@@ -70,38 +70,80 @@ export default async function BillingPage() {
           <h3>Payment History</h3>
         </div>
         {payments.length > 0 ? (
-          <table className="table" style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left' }}>
-                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Order</th>
-                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Platform</th>
-                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Date</th>
-                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Amount</th>
-                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Status</th>
-                <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Invoice</th>
-              </tr>
-            </thead>
-            <tbody>
+          <>
+            <div className="desktop-only" style={{ overflowX: 'auto' }}>
+              <table className="table" style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left' }}>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Order</th>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Platform</th>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Date</th>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Amount</th>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Status</th>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Invoice</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {payments.map(p => (
+                    <tr key={p.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                      <td style={{ padding: '16px 24px', color: 'var(--text-secondary)' }}>{p.orderId.slice(-8)}</td>
+                      <td style={{ padding: '16px 24px', textTransform: 'capitalize' }}>{p.order.platform}</td>
+                      <td style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>{new Date(p.createdAt).toLocaleDateString()}</td>
+                      <td style={{ padding: '16px 24px' }}><strong>${p.amount.toFixed(2)}</strong></td>
+                      <td style={{ padding: '16px 24px' }}><span className={`badge ${STATUS_STYLES[p.status]}`}>{p.status}</span></td>
+                      <td style={{ padding: '16px 24px' }}>
+                        {p.invoicePdfUrl ? (
+                          <a href={p.invoicePdfUrl} target="_blank" rel="noreferrer" className="btn btn-ghost" style={{ padding: '4px 8px', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <Receipt size={14} /> PDF
+                          </a>
+                        ) : (
+                          <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>N/A</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="mobile-only" style={{ flexDirection: 'column' }}>
               {payments.map(p => (
-                <tr key={p.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                  <td style={{ padding: '16px 24px', color: 'var(--text-secondary)' }}>{p.orderId.slice(-8)}</td>
-                  <td style={{ padding: '16px 24px', textTransform: 'capitalize' }}>{p.order.platform}</td>
-                  <td style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>{new Date(p.createdAt).toLocaleDateString()}</td>
-                  <td style={{ padding: '16px 24px' }}><strong>${p.amount.toFixed(2)}</strong></td>
-                  <td style={{ padding: '16px 24px' }}><span className={`badge ${STATUS_STYLES[p.status]}`}>{p.status}</span></td>
-                  <td style={{ padding: '16px 24px' }}>
+                <div key={p.id} className="order-mobile-card">
+                  <div className="order-mobile-card-row">
+                    <span className="order-mobile-card-label">Order</span>
+                    <span style={{ color: 'var(--text-secondary)' }}>{p.orderId.slice(-8)}</span>
+                  </div>
+                  <div className="order-mobile-card-row">
+                    <span className="order-mobile-card-label">Platform</span>
+                    <span style={{ textTransform: 'capitalize' }}>{p.order.platform}</span>
+                  </div>
+                  <div className="order-mobile-card-row">
+                    <span className="order-mobile-card-label">Date</span>
+                    <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>{new Date(p.createdAt).toLocaleDateString()}</span>
+                  </div>
+                  <div className="order-mobile-card-row">
+                    <span className="order-mobile-card-label">Amount</span>
+                    <span style={{ fontWeight: 'bold' }}>${p.amount.toFixed(2)}</span>
+                  </div>
+                  <div className="order-mobile-card-row">
+                    <span className="order-mobile-card-label">Status</span>
+                    <span className={`badge ${STATUS_STYLES[p.status]}`}>{p.status}</span>
+                  </div>
+                  <div className="order-mobile-card-row">
+                    <span className="order-mobile-card-label">Invoice</span>
                     {p.invoicePdfUrl ? (
-                      <a href={p.invoicePdfUrl} target="_blank" rel="noreferrer" className="btn btn-ghost" style={{ padding: '4px 8px', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                        <Receipt size={14} /> PDF
+                      <a href={p.invoicePdfUrl} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--accent)', textDecoration: 'underline' }}>
+                        <Receipt size={14} /> View PDF
                       </a>
                     ) : (
                       <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>N/A</span>
                     )}
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </>
         ) : (
           <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
             No payments found.
