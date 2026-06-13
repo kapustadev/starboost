@@ -106,7 +106,12 @@ export default async function DashboardPage() {
                   {recentOrders.map(order => (
                     <tr key={order.id} style={{ borderBottom: '1px solid var(--border)' }}>
                       <td style={{ padding: '16px 24px', fontWeight: 500, textTransform: 'capitalize' }}>
-                        {order.platform}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          {order.platform}
+                          {order.isBulk && (
+                            <span className="badge badge-purple" style={{ fontSize: '0.65rem', padding: '2px 6px' }}>Bulk</span>
+                          )}
+                        </div>
                       </td>
                       <td style={{ padding: '16px 24px', textTransform: 'uppercase' }}>
                         {order.country}
@@ -141,7 +146,12 @@ export default async function DashboardPage() {
                 <div key={order.id} className="order-mobile-card">
                   <div className="order-mobile-card-row">
                     <span className="order-mobile-card-label">Platform</span>
-                    <span style={{ fontWeight: 500, textTransform: 'capitalize' }}>{order.platform}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontWeight: 500, textTransform: 'capitalize' }}>{order.platform}</span>
+                      {order.isBulk && (
+                        <span className="badge badge-purple" style={{ fontSize: '0.65rem', padding: '2px 6px' }}>Bulk</span>
+                      )}
+                    </div>
                   </div>
                   <div className="order-mobile-card-row">
                     <span className="order-mobile-card-label">Country</span>
