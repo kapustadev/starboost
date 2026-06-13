@@ -76,7 +76,7 @@ export default async function OrdersPage() {
                     ${order.totalPrice.toFixed(2)}
                   </td>
                   <td style={{ padding: '16px 24px' }}>
-                    {order.status !== 'pending' && (
+                    {order.status !== 'pending' && order.status !== 'cancelled' && (
                       <Link href={`/dashboard/orders/${order.id}/chat`} className="btn btn-secondary btn-sm" style={{ padding: '6px 12px' }}>
                         💬 Chat
                       </Link>
@@ -122,7 +122,7 @@ export default async function OrdersPage() {
                   <span className="order-mobile-card-label">Total</span>
                   <span style={{ fontWeight: 600 }}>${order.totalPrice.toFixed(2)}</span>
                 </div>
-                {order.status !== 'pending' && (
+                {order.status !== 'pending' && order.status !== 'cancelled' && (
                   <div style={{ marginTop: '8px' }}>
                     <Link href={`/dashboard/orders/${order.id}/chat`} className="btn btn-secondary btn-full">
                       💬 Order Chat

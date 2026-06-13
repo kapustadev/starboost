@@ -29,8 +29,12 @@ export default async function OrderChatPage({ params }: { params: Promise<{ id: 
     }
   })
 
-  // If no ticket exists, create one lazily
+  // If no ticket exists, create one lazily, but ONLY if the order is actually paid
   if (!ticket) {
+    if (order.status === 'pending' || order.status === 'cancelled') {
+      redirect('/dashboard/orders')
+    }
+
     const newTicket = await prisma.ticket.create({
       data: {
         userId: session.user.id,
