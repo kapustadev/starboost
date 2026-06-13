@@ -10,6 +10,7 @@ import { Calculator } from 'lucide-react'
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const dropdownRef = useRef<HTMLLIElement>(null)
   const { data: session, status } = useSession()
 
@@ -136,7 +137,7 @@ export default function Navbar() {
             <li><Link href="/#faq">FAQ</Link></li>
           </ul>
 
-          <div className="navbar-actions">
+          <div className="navbar-actions desktop-only">
             {status === 'loading' ? (
               <div style={{ width: '180px' }}></div>
             ) : session ? (
@@ -148,7 +149,54 @@ export default function Navbar() {
               </>
             )}
           </div>
+
+          <button className="mobile-menu-btn" onClick={() => setMobileOpen(!mobileOpen)}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {mobileOpen ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </>
+              ) : (
+                <>
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                </>
+              )}
+            </svg>
+          </button>
         </div>
+      </div>
+
+      <div className={`mobile-nav-overlay ${mobileOpen ? 'open' : ''}`}>
+        <Link href="/#pricing" onClick={() => setMobileOpen(false)} style={{ fontSize: '1.2rem', fontWeight: 500 }}>Pricing</Link>
+        <Link href="/#how" onClick={() => setMobileOpen(false)} style={{ fontSize: '1.2rem', fontWeight: 500 }}>How it works</Link>
+        <Link href="/#faq" onClick={() => setMobileOpen(false)} style={{ fontSize: '1.2rem', fontWeight: 500 }}>FAQ</Link>
+        
+        <div style={{ margin: '16px 0', height: '1px', background: 'var(--border)' }} />
+        
+        <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Services</div>
+        {PLATFORMS.map(p => (
+          <Link key={p.id} href={`/services/${p.id}`} onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.1rem' }}>
+            <Image src={p.icon} alt={p.name} width={24} height={24} style={{ borderRadius: '6px' }} />
+            {p.name}
+          </Link>
+        ))}
+        <Link href="/tools/rating-calculator" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.1rem' }}>
+          <Calculator size={20} color="var(--accent)" /> Rating Calculator
+        </Link>
+        
+        <div style={{ margin: '16px 0', height: '1px', background: 'var(--border)' }} />
+        
+        {session ? (
+          <Link href="/dashboard" className="btn btn-primary btn-full" onClick={() => setMobileOpen(false)}>Go to Dashboard</Link>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <Link href="/login" className="btn btn-secondary btn-full" onClick={() => setMobileOpen(false)}>Sign In</Link>
+            <Link href="/register" className="btn btn-primary btn-full" onClick={() => setMobileOpen(false)}>Get Started</Link>
+          </div>
+        )}
       </div>
     </nav>
   )

@@ -60,7 +60,7 @@ export async function POST(req: Request) {
             `📦 <b>Quantity:</b> ${order.quantity}\n` +
             `🔗 <b>Target URL:</b> ${order.targetUrl}\n` +
             `💵 <b>Amount:</b> $${(session.amount_total / 100).toFixed(2)}\n` +
-            `✉️ <b>User:</b> ${order.user.email}`
+            `✉️ <b>User:</b> ${order.user?.email || 'Unknown'}`
           )
         })
       }

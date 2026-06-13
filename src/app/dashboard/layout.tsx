@@ -7,6 +7,8 @@ import { LayoutDashboard, ShoppingBag, Ticket, CreditCard, User, ArrowLeft, LogO
 import Image from 'next/image'
 import { PLATFORMS } from '@/lib/data'
 
+import { useState } from 'react'
+
 const NAV = [
   { label: 'Overview', href: '/dashboard', icon: <LayoutDashboard size={18} /> },
   { label: 'My Orders', href: '/dashboard/orders', icon: <ShoppingBag size={18} /> },
@@ -17,11 +19,22 @@ const NAV = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
     <div className="dashboard-layout">
+      {/* Mobile Header */}
+      <div className="dashboard-mobile-header">
+        <Link href="/" style={{ textDecoration: 'none', fontFamily: 'var(--font-display)', fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+          Stars<span style={{ color: 'var(--accent)' }}>Boost</span>
+        </Link>
+        <button onClick={() => setMobileOpen(!mobileOpen)} style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', cursor: 'pointer' }}>
+          {mobileOpen ? <LogOut size={24} style={{ transform: 'rotate(45deg)' }} /> : <LayoutDashboard size={24} />}
+        </button>
+      </div>
+
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${mobileOpen ? 'open' : ''}`}>
         <Link href="/" style={{ textDecoration: 'none' }}>
           <div className="sidebar-logo">
             Stars<span>Boost</span>
@@ -35,6 +48,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               key={item.href}
               href={item.href}
               className={`sidebar-link ${pathname === item.href ? 'active' : ''}`}
+              onClick={() => setMobileOpen(false)}
             >
               <span style={{ display: 'flex', alignItems: 'center' }}>{item.icon}</span>
               {item.label}
@@ -45,7 +59,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="sidebar-section" style={{marginTop:'16px'}}>
           <span className="sidebar-section-label">Quick Order</span>
           {PLATFORMS.map(p => (
-            <Link key={p.id} href={`/dashboard/order/${p.id}`} className="sidebar-link">
+            <Link key={p.id} href={`/dashboard/order/${p.id}`} className="sidebar-link" onClick={() => setMobileOpen(false)}>
               <span style={{ display: 'flex', alignItems: 'center' }}>
                 <Image src={p.icon} alt={p.name} width={18} height={18} style={{ borderRadius: '4px' }} />
               </span>
