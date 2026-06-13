@@ -1482,3 +1482,5 @@ table tr:hover td { background: rgba(255,255,255,0.02); }
   .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
   .auth-card { padding: 32px 24px; }
 }
+.desktop-notification-bell { display: block; }
+@media (max-width: 1024px) { .desktop-notification-bell { display: none !important; } }

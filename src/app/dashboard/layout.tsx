@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { PLATFORMS } from '@/lib/data'
 
 import { useState } from 'react'
+import NotificationBell from '@/components/dashboard/NotificationBell'
 
 const NAV = [
   { label: 'Overview', href: '/dashboard', icon: <LayoutDashboard size={18} /> },
@@ -31,9 +32,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Link href="/" style={{ textDecoration: 'none', fontFamily: 'var(--font-display)', fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>
           Stars<span style={{ color: 'var(--accent)' }}>Boost</span>
         </Link>
-        <button onClick={() => setMobileOpen(!mobileOpen)} style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', cursor: 'pointer' }}>
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <NotificationBell />
+          <button onClick={() => setMobileOpen(!mobileOpen)} style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', cursor: 'pointer' }}>
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Sidebar */}
@@ -82,7 +86,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
 
       {/* Main Content */}
-      <main className="dashboard-main">
+      <main className="dashboard-main" style={{ position: 'relative' }}>
+        <div style={{ position: 'absolute', top: '32px', right: '32px', zIndex: 50 }} className="desktop-notification-bell">
+          <NotificationBell />
+        </div>
         {children}
       </main>
     </div>

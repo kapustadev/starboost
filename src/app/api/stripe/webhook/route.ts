@@ -64,6 +64,25 @@ export async function POST(req: Request) {
           }
         })
 
+        // Give Affiliate Commission
+        if (order.user?.referredById) {
+          const commission = (session.amount_total / 100) * 0.10
+          
+          await prisma.user.update({
+            where: { id: order.user.referredById },
+            data: { balance: { increment: commission } }
+          })
+
+          await prisma.notification.create({
+            data: {
+              userId: order.user.referredById,
+              title: 'Commission Earned! 🎉',
+              message: `You just earned $${commission.toFixed(2)} from a referred user's order.`,
+              link: '/dashboard/affiliate'
+            }
+          })
+        }
+
         // Create Chat Ticket for this order
         const ticket = await prisma.ticket.create({
           data: {

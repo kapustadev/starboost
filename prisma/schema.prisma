@@ -28,9 +28,19 @@ model User {
   referredById     String?
   role             String    @default("USER") // USER, RESELLER, ADMIN
 
+  phone            String?
+  company          String?
+  country          String    @default("us")
+  
+  emailNotifications Boolean @default(true)
+  orderUpdates       Boolean @default(true)
+  ticketReplies      Boolean @default(true)
+  marketing          Boolean @default(false)
+
   referredBy       User?     @relation("Referrals", fields: [referredById], references: [id])
   referrals        User[]    @relation("Referrals")
   ratingTrackers   RatingTracker[]
+  notifications    Notification[]
 }
 
 model Account {
@@ -176,4 +186,16 @@ model RatingTracker {
   updatedAt     DateTime  @updatedAt
 
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  link      String?  // Optional link to redirect when clicked
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

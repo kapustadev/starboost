@@ -12,7 +12,13 @@ export default async function AffiliateDashboard() {
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
     include: {
-      referrals: true,
+      referrals: {
+        include: {
+          orders: {
+            include: { payment: true }
+          }
+        }
+      },
     }
   })
 
@@ -60,7 +66,7 @@ export default async function AffiliateDashboard() {
         </div>
       </div>
 
-      <div className="bento-card accent-card">
+      <div className="bento-card accent-card" style={{ marginBottom: '32px' }}>
         <h3>Your Referral Link</h3>
         <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
           Share this link with your audience, clients, or friends. When they register and buy reviews, you earn 10% of their order value.
@@ -76,6 +82,51 @@ export default async function AffiliateDashboard() {
           />
           <CopyLinkButton link={referralLink} />
         </div>
+      </div>
+
+      <div className="bento-card">
+        <h3>Referred Users</h3>
+        {user.referrals.length === 0 ? (
+          <p style={{ color: 'var(--text-secondary)', marginTop: '12px' }}>You haven't referred anyone yet.</p>
+        ) : (
+          <div style={{ marginTop: '20px', overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
+                  <th style={{ padding: '12px 0' }}>User</th>
+                  <th>Joined Date</th>
+                  <th>Total Spent</th>
+                  <th>Earned Commission (10%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {user.referrals.map((refUser) => {
+                  const totalSpent = refUser.orders.reduce((acc, order) => {
+                    return acc + (order.payment?.status === 'paid' ? order.payment.amount : 0)
+                  }, 0)
+                  const commission = totalSpent * 0.10
+
+                  return (
+                    <tr key={refUser.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '16px 0', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--accent)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                          {(refUser.email || '?').charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <div style={{ fontWeight: 500 }}>{refUser.name || 'Anonymous User'}</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{refUser.email}</div>
+                        </div>
+                      </td>
+                      <td style={{ color: 'var(--text-secondary)' }}>{new Date(refUser.createdAt).toLocaleDateString()}</td>
+                      <td style={{ fontWeight: 500 }}>${totalSpent.toFixed(2)}</td>
+                      <td style={{ color: 'var(--green)', fontWeight: 600 }}>${commission.toFixed(2)}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   )

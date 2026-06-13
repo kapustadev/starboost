@@ -24,7 +24,7 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
   
   const basePrice = getPricePerReview(platform, country, 'none')
   const subtotal = totalReviews * basePrice
-  const discount = subtotal * 0.20
+  const discount = subtotal * 0.15
   const total = subtotal - discount
 
   const handleCheckout = () => {
@@ -60,7 +60,7 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
         <div className="stat-card">
           <div className="stat-card-label">Your Discount</div>
           <div style={{ fontSize: '2.5rem', fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--green)' }}>
-            20% OFF
+            15% OFF
           </div>
           <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '8px' }}>
             Automatically applied to all bulk orders.
@@ -148,7 +148,7 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
                 <span>${subtotal.toFixed(2)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', color: 'var(--green)' }}>
-                <span>Reseller Discount (20%)</span>
+                <span>Reseller Discount (15%)</span>
                 <span>-${discount.toFixed(2)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-color)', paddingTop: '16px', fontSize: '1.2rem', fontWeight: 800 }}>

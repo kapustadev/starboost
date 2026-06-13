@@ -1,16 +1,35 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
+import { updateProfile } from '@/app/actions/profile'
+import { toast } from 'react-hot-toast'
 
 export function ProfileClient({ initialProfile }: { initialProfile: any }) {
   const [profile, setProfile] = useState(initialProfile)
-  const [saved, setSaved] = useState(false)
+  const [isPending, startTransition] = useTransition()
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault()
-    // Normally you'd call an API route here
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+  const handleSave = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    
+    startTransition(async () => {
+      const res = await updateProfile(profile)
+      if (res.error) {
+        toast.error(res.error)
+      } else {
+        toast.success('Profile updated successfully!')
+      }
+    })
+  }
+
+  const handleToggle = (key: string) => {
+    const updatedProfile = { ...profile, [key]: !profile[key] }
+    setProfile(updatedProfile)
+    
+    // Auto-save toggle changes
+    startTransition(async () => {
+      await updateProfile(updatedProfile)
+      toast.success('Preferences updated')
+    })
   }
 
   return (
@@ -61,8 +80,8 @@ export function ProfileClient({ initialProfile }: { initialProfile: any }) {
                 <option value="es">🇪🇸 Spain</option>
               </select>
             </div>
-            <button type="submit" className="btn btn-primary" style={{marginTop:'4px'}}>
-              {saved ? '✓ Saved!' : 'Save Changes'}
+            <button type="submit" className="btn btn-primary" style={{marginTop:'4px'}} disabled={isPending}>
+              {isPending ? 'Saving...' : 'Save Changes'}
             </button>
           </form>
         </div>
@@ -84,7 +103,7 @@ export function ProfileClient({ initialProfile }: { initialProfile: any }) {
                     <div style={{fontSize:'0.8rem',color:'var(--text-muted)'}}>{n.desc}</div>
                   </div>
                   <button
-                    onClick={() => setProfile((prev: any) => ({...prev, [n.key]: !prev[n.key]}))}
+                    onClick={() => handleToggle(n.key)}
                     style={{
                       width:'44px',height:'24px',
                       borderRadius:'12px',
