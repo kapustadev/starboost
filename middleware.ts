@@ -3,7 +3,19 @@ import type { NextRequest } from 'next/server'
 
 // Lightweight middleware - no Prisma/Node.js imports (Edge Runtime compatible)
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+  const { pathname, searchParams } = request.nextUrl
+  const response = NextResponse.next()
+
+  // Capture referral code if present
+  const ref = searchParams.get('ref')
+  if (ref) {
+    // Set cookie for 30 days
+    response.cookies.set('starsboost_ref', ref, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      sameSite: 'lax',
+    })
+  }
 
   // Protect dashboard routes
   if (pathname.startsWith('/dashboard')) {
@@ -19,9 +31,11 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next()
+  return response
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'],
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|logos|public).*)',
+  ],
 }

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 
@@ -26,13 +27,29 @@ export async function POST(req: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
+    // Capture Referral
+    const cookieStore = await cookies()
+    const refCode = cookieStore.get('starsboost_ref')?.value
+    let referredById = null
+    
+    if (refCode) {
+      const referrer = await prisma.user.findUnique({
+        where: { referralCode: refCode }
+      })
+      if (referrer) {
+        referredById = referrer.id
+      }
+    }
+
     const user = await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
+        referredById,
       },
     })
+
 
     // Send Telegram notification
     import('@/lib/telegram').then(({ sendTelegramMessage }) => {

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
-import { LayoutDashboard, ShoppingBag, Ticket, CreditCard, User, ArrowLeft, LogOut, Menu, X } from 'lucide-react'
+import { LayoutDashboard, ShoppingBag, Ticket, CreditCard, User, ArrowLeft, LogOut, Menu, X, Users, Briefcase, LineChart } from 'lucide-react'
 import Image from 'next/image'
 import { PLATFORMS } from '@/lib/data'
 
@@ -12,7 +12,10 @@ import { useState } from 'react'
 const NAV = [
   { label: 'Overview', href: '/dashboard', icon: <LayoutDashboard size={18} /> },
   { label: 'My Orders', href: '/dashboard/orders', icon: <ShoppingBag size={18} /> },
+  { label: 'Monitoring', href: '/dashboard/monitoring', icon: <LineChart size={18} /> },
   { label: 'Support Tickets', href: '/dashboard/tickets', icon: <Ticket size={18} /> },
+  { label: 'Affiliate', href: '/dashboard/affiliate', icon: <Users size={18} /> },
+  { label: 'Reseller Portal', href: '/dashboard/reseller', icon: <Briefcase size={18} /> },
   { label: 'Billing', href: '/dashboard/billing', icon: <CreditCard size={18} /> },
   { label: 'Profile', href: '/dashboard/profile', icon: <User size={18} /> },
 ]

@@ -136,6 +136,7 @@ export default function Navbar() {
             <li><Link href="/#pricing">Pricing</Link></li>
             <li><Link href="/#how">How it works</Link></li>
             <li><Link href="/#faq">FAQ</Link></li>
+            <li><Link href="/blog">Blog</Link></li>
           </ul>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -177,6 +178,7 @@ export default function Navbar() {
         <Link href="/#pricing" onClick={() => setMobileOpen(false)} style={{ fontSize: '1.2rem', fontWeight: 500 }}>Pricing</Link>
         <Link href="/#how" onClick={() => setMobileOpen(false)} style={{ fontSize: '1.2rem', fontWeight: 500 }}>How it works</Link>
         <Link href="/#faq" onClick={() => setMobileOpen(false)} style={{ fontSize: '1.2rem', fontWeight: 500 }}>FAQ</Link>
+        <Link href="/blog" onClick={() => setMobileOpen(false)} style={{ fontSize: '1.2rem', fontWeight: 500 }}>Blog</Link>
         
         <div style={{ margin: '16px 0', height: '1px', background: 'var(--border)' }} />
         
