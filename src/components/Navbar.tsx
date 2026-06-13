@@ -33,8 +33,9 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-      <div className="container">
+    <>
+      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+        <div className="container">
         <div className="navbar-inner">
           <Link href="/" className="navbar-logo" style={{ textDecoration: 'none' }}>
             Stars<span>Boost</span>
@@ -170,6 +171,7 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+    </nav>
 
       <div className={`mobile-nav-overlay ${mobileOpen ? 'open' : ''}`}>
         <Link href="/#pricing" onClick={() => setMobileOpen(false)} style={{ fontSize: '1.2rem', fontWeight: 500 }}>Pricing</Link>
@@ -200,6 +202,6 @@ export default function Navbar() {
           </div>
         )}
       </div>
-    </nav>
+    </>
   )
 }
