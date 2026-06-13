@@ -1,7 +1,13 @@
 'use client'
 
 import { SessionProvider } from 'next-auth/react'
+import InactivityTracker from '@/components/InactivityTracker'
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  return <SessionProvider>{children}</SessionProvider>
+  return (
+    <SessionProvider>
+      <InactivityTracker />
+      {children}
+    </SessionProvider>
+  )
 }

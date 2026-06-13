@@ -27,7 +27,7 @@ export default function Footer() {
               <li><Link href="/login">Sign In</Link></li>
               <li><Link href="/register">Register</Link></li>
               <li><Link href="/dashboard">Dashboard</Link></li>
-              <li><Link href="/help">Help Center</Link></li>
+              <li><Link href="/docs">Documentation</Link></li>
             </ul>
           </div>
           <div>
