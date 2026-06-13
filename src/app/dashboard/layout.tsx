@@ -26,8 +26,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-    document.querySelector('.dashboard-main')?.scrollTo(0, 0)
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: 'instant' })
+      const main = document.querySelector('.dashboard-main')
+      if (main) main.scrollTo({ top: 0, behavior: 'instant' })
+    }
+    
+    // Call immediately
+    scrollToTop()
+    // Call after a tick to allow React to render the new page content
+    const timeout = setTimeout(scrollToTop, 50)
+    
+    return () => clearTimeout(timeout)
   }, [pathname])
 
   return (

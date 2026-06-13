@@ -173,6 +173,9 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
       {activeTab === 'orders' && (
         <div className="bento-card">
           <h3>Client Orders</h3>
+          {orders.length === 0 ? (
+            <p style={{ color: 'var(--text-secondary)', marginTop: '12px' }}>You have no bulk orders yet.</p>
+          ) : (
             <div style={{ marginTop: '20px' }}>
               <div className="desktop-only" style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
