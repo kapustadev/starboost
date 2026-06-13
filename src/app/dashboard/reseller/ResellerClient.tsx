@@ -176,8 +176,8 @@ export default function ResellerClient({ user, orders }: { user: any, orders: an
           {orders.length === 0 ? (
             <p style={{ color: 'var(--text-secondary)', marginTop: '12px' }}>You have no bulk orders yet.</p>
           ) : (
-            <div style={{ marginTop: '20px' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <div style={{ marginTop: '20px', overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
                     <th style={{ padding: '12px 0' }}>URL</th>
