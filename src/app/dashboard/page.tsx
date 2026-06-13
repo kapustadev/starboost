@@ -99,6 +99,7 @@ export default async function DashboardPage() {
                     <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Quantity</th>
                     <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Status</th>
                     <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total</th>
+                    <th style={{ padding: '16px 24px', color: 'var(--text-muted)', fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -120,6 +121,13 @@ export default async function DashboardPage() {
                       </td>
                       <td style={{ padding: '16px 24px', fontWeight: 600 }}>
                         ${order.totalPrice.toFixed(2)}
+                      </td>
+                      <td style={{ padding: '16px 24px' }}>
+                        {order.status !== 'pending' && order.status !== 'cancelled' && (
+                          <Link href={`/dashboard/orders/${order.id}/chat`} className="btn btn-secondary btn-sm" style={{ padding: '6px 12px' }}>
+                            💬 Chat
+                          </Link>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -153,6 +161,13 @@ export default async function DashboardPage() {
                     <span className="order-mobile-card-label">Total</span>
                     <span style={{ fontWeight: 600 }}>${order.totalPrice.toFixed(2)}</span>
                   </div>
+                  {order.status !== 'pending' && order.status !== 'cancelled' && (
+                    <div style={{ marginTop: '8px' }}>
+                      <Link href={`/dashboard/orders/${order.id}/chat`} className="btn btn-secondary btn-full">
+                        💬 Order Chat
+                      </Link>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
